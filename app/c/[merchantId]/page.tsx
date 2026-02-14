@@ -1,0 +1,176 @@
+'use client';
+
+import { useState } from 'react';
+import { useParams } from 'next/navigation';
+
+interface CheckInData {
+  stamps_current: number;
+  stamps_needed: number;
+  redeemed: boolean;
+  reward_text: string;
+}
+
+export default function CheckIn() {
+  const params = useParams();
+  const merchantId = params.merchantId as string;
+  const [phone, setPhone] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [data, setData] = useState<CheckInData | null>(null);
+
+  const formatPhone = (value: string) => {
+    const cleaned = value.replace(/\D/g, '').slice(0, 10);
+    if (cleaned.length <= 3) return cleaned;
+    if (cleaned.length <= 6) return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleaned = phone.replace(/\D/g, '');
+    
+    if (cleaned.length !== 10) {
+      setError('Enter a valid phone number');
+      return;
+    }
+
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/checkin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ merchantId, phone: cleaned }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        setError(result.error || 'Check-in failed');
+        setLoading(false);
+        return;
+      }
+
+      if (result.token) {
+        localStorage.setItem(`tapqr_token_${merchantId}`, result.token);
+      }
+
+      setData(result);
+    } catch {
+      setError('Connection failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (data) {
+    const progress = (data.stamps_current / data.stamps_needed) * 100;
+    
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-6">
+        <div className="w-full max-w-md">
+          {data.redeemed ? (
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200 text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-semibold mb-2 text-slate-900">Reward earned</h2>
+              <p className="text-slate-600 mb-6">
+                {data.reward_text}
+              </p>
+              <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                <p className="text-xs text-slate-600 font-medium">Show this screen to redeem</p>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
+              <div className="mb-6">
+                <div className="flex justify-between text-xs mb-2.5 text-slate-600">
+                  <span className="font-medium">{data.stamps_current} stamps</span>
+                  <span>{data.stamps_needed - data.stamps_current} remaining</span>
+                </div>
+                <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-blue-500 to-violet-500 rounded-full transition-all duration-700"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-5 gap-2.5 mb-6">
+                {Array.from({ length: data.stamps_needed }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`aspect-square rounded-lg flex items-center justify-center transition-all duration-300 ${
+                      i < data.stamps_current
+                        ? 'bg-gradient-to-br from-blue-500 to-violet-500'
+                        : 'bg-slate-100'
+                    }`}
+                  >
+                    {i < data.stamps_current && (
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setData(null)}
+                className="text-xs text-slate-600 hover:text-slate-900 transition-colors"
+              >
+                Done
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-6">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-semibold mb-1.5 text-slate-900">Check in</h1>
+          <p className="text-sm text-slate-600">Enter your number to earn a stamp</p>
+        </div>
+
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="tel"
+              placeholder="(555) 123-4567"
+              value={phone}
+              onChange={(e) => setPhone(formatPhone(e.target.value))}
+              className="w-full px-4 py-3 text-sm text-center border border-slate-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-shadow"
+              autoFocus
+            />
+
+            {error && (
+              <div className="text-xs text-red-700 bg-red-50 px-3 py-2 rounded-md border border-red-200">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-slate-900 text-white py-2.5 text-sm rounded-md hover:bg-slate-800 disabled:opacity-60 transition-colors font-medium"
+            >
+              {loading ? 'Checking in...' : 'Continue'}
+            </button>
+          </form>
+
+          <p className="text-xs text-slate-500 text-center mt-4">
+            Number is encrypted and private
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
