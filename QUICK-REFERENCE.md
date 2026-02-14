@@ -1,4 +1,4 @@
-# TapQR Loyalty - Quick Reference
+# StarQR Loyalty - Quick Reference
 
 ## Common Commands
 

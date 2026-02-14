@@ -1,4 +1,4 @@
-# TapQR Loyalty - Pre-Launch Checklist
+# StarQR Loyalty - Pre-Launch Checklist
 
 Use this checklist before deploying to production.
 
@@ -13,7 +13,7 @@ Use this checklist before deploying to production.
 
 ## Stripe Configuration
 - [ ] Stripe account fully verified
-- [ ] Product created: "TapQR Loyalty - Monthly"
+- [ ] Product created: "StarQR Loyalty - Monthly"
 - [ ] Price set to $9.00/month recurring
 - [ ] Price ID copied to environment variables
 - [ ] Live API keys obtained (not test keys)

@@ -49,7 +49,7 @@ export default function Signup() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-6">
       <div className="w-full max-w-sm">
         <Link href="/" className="inline-block mb-10">
-          <div className="font-medium text-slate-900">TapQR</div>
+          <div className="font-medium text-slate-900">StarQR</div>
         </Link>
 
         <h1 className="text-2xl font-semibold mb-1.5 text-slate-900">Create account</h1>

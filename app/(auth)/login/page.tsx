@@ -42,7 +42,7 @@ export default function Login() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-6">
       <div className="w-full max-w-sm">
         <Link href="/" className="inline-block mb-10">
-          <div className="font-medium text-slate-900">TapQR</div>
+          <div className="font-medium text-slate-900">StarQR</div>
         </Link>
 
         <h1 className="text-2xl font-semibold mb-1.5 text-slate-900">Welcome back</h1>
@@ -97,7 +97,7 @@ export default function Login() {
         </form>
 
         <div className="mt-6 text-center text-sm">
-          <span className="text-slate-500">New to TapQR? </span>
+          <span className="text-slate-500">New to StarQR? </span>
           <Link href="/signup" className="font-medium text-slate-900 hover:text-slate-700 transition-colors">
             Create account
           </Link>

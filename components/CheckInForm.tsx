@@ -67,8 +67,8 @@ export function CheckInForm({ merchantId, onSuccess }: CheckInFormProps) {
 
       // Store token for future auto-check-ins
       if (data.token) {
-        localStorage.setItem(`tapqr_token_${merchantId}`, data.token);
-        localStorage.setItem(`tapqr_customer_${merchantId}`, data.customer_id);
+        localStorage.setItem(`starqr_token_${merchantId}`, data.token);
+        localStorage.setItem(`starqr_customer_${merchantId}`, data.customer_id);
       }
 
       onSuccess(data);

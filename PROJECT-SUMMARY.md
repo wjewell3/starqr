@@ -1,4 +1,4 @@
-# TapQR Loyalty - Project Summary
+# StarQR Loyalty - Project Summary
 
 ## What Has Been Built
 
@@ -109,7 +109,7 @@ The check-in flow is **production-ready** and includes:
 ## Project Structure
 
 ```
-tapqr-loyalty/
+starqr/
 ├── app/
 │   ├── api/                      # ✅ All API routes complete
 │   │   ├── checkin/             # ✅ Customer check-in

@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-8">
               <Link href="/dashboard" className="font-medium text-slate-900">
-                TapQR
+                StarQR
               </Link>
               <nav className="hidden md:flex gap-6">
                 {nav.map((item) => {

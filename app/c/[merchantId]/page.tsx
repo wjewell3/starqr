@@ -53,7 +53,7 @@ export default function CheckIn() {
       }
 
       if (result.token) {
-        localStorage.setItem(`tapqr_token_${merchantId}`, result.token);
+        localStorage.setItem(`starqr_token_${merchantId}`, result.token);
       }
 
       setData(result);

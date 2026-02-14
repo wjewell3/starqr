@@ -1,4 +1,4 @@
-# TapQR Loyalty - COMPLETE BUILD ✅
+# StarQR Loyalty - COMPLETE BUILD ✅
 
 ## 🎉 Everything is Ready!
 
@@ -93,7 +93,7 @@ This is a **complete, production-ready** QR-based loyalty system. All core featu
 ## 📁 Complete File Structure
 
 ```
-tapqr-loyalty/
+starqr/
 ├── app/
 │   ├── (auth)/
 │   │   ├── login/page.tsx          ✅ Login page

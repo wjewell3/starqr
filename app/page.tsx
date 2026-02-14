@@ -5,7 +5,7 @@ export default function Home() {
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
       <nav className="border-b border-slate-200/60 backdrop-blur-sm bg-white/80 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="font-medium text-slate-900">TapQR</div>
+          <div className="font-medium text-slate-900">StarQR</div>
           <div className="flex gap-6 items-center">
             <Link href="/login" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
               Sign in
@@ -129,7 +129,7 @@ export default function Home() {
               Build customer retention that works
             </h2>
             <p className="text-lg text-slate-300 mb-8 max-w-lg">
-              Most loyalty programs fail because they're annoying. TapQR removes all friction.
+              Most loyalty programs fail because they're annoying. StarQR removes all friction.
             </p>
             <Link 
               href="/signup"
@@ -143,7 +143,7 @@ export default function Home() {
 
       <footer className="border-t border-slate-200/60">
         <div className="max-w-5xl mx-auto px-6 py-10 flex justify-between items-center text-xs text-slate-500">
-          <div>© 2026 TapQR</div>
+          <div>© 2026 StarQR</div>
           <div className="flex gap-6">
             <Link href="/dashboard/upgrade" className="hover:text-slate-900 transition-colors">Pricing</Link>
             <Link href="/login" className="hover:text-slate-900 transition-colors">Sign in</Link>

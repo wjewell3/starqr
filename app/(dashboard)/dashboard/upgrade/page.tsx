@@ -56,7 +56,7 @@ export default function UpgradePage() {
         <Card className="border-2 border-amber-500 shadow-xl">
           <CardHeader className="text-center bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-200">
             <div className="text-6xl mb-4">⭐</div>
-            <CardTitle className="text-3xl">TapQR Pro</CardTitle>
+            <CardTitle className="text-3xl">StarQR Pro</CardTitle>
             <CardDescription className="text-lg mt-2">
               Everything you need to reward your customers
             </CardDescription>
@@ -151,7 +151,7 @@ export default function UpgradePage() {
       <div className="max-w-2xl mx-auto">
         <Card>
           <CardHeader>
-            <CardTitle>Join 100+ businesses already using TapQR Pro</CardTitle>
+            <CardTitle>Join 100+ businesses already using StarQR Pro</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">

@@ -1,6 +1,6 @@
-# TapQR Loyalty - Complete Setup Guide
+# StarQR Loyalty - Complete Setup Guide
 
-This guide will walk you through setting up TapQR Loyalty from scratch.
+This guide will walk you through setting up StarQR Loyalty from scratch.
 
 ## Part 1: Supabase Database Setup
 
@@ -9,7 +9,7 @@ This guide will walk you through setting up TapQR Loyalty from scratch.
 1. Go to [supabase.com](https://supabase.com) and sign up/login
 2. Click "New Project"
 3. Choose organization and enter:
-   - **Name**: tapqr-loyalty
+   - **Name**: starqr
    - **Database Password**: (generate strong password and save it)
    - **Region**: Choose closest to your target audience
 4. Wait for project to finish setting up (~2 minutes)
@@ -190,7 +190,7 @@ CREATE POLICY "Service role can manage rewards" ON rewards_redeemed
 
 1. Go to **Products** → **Add Product**
 2. Enter:
-   - **Name**: TapQR Loyalty - Monthly
+   - **Name**: StarQR Loyalty - Monthly
    - **Description**: Unlimited customers and premium features
    - **Pricing**: Recurring
    - **Price**: $9.00 USD
@@ -325,7 +325,7 @@ git init
 git add .
 git commit -m "Initial commit"
 git branch -M main
-git remote add origin https://github.com/yourusername/tapqr-loyalty.git
+git remote add origin https://github.com/yourusername/starqr.git
 git push -u origin main
 ```
 

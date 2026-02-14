@@ -1,4 +1,4 @@
-# TapQR Loyalty - Features Showcase
+# StarQR Loyalty - Features Showcase
 
 A visual guide to everything that's been implemented.
 
@@ -112,7 +112,7 @@ A visual guide to everything that's been implemented.
 ### Layout
 
 **Header:**
-- Logo (☕ TapQR)
+- Logo (☕ StarQR)
 - Business name
 - Plan badge (Free/Pro)
 - Upgrade button (free tier only)
@@ -303,7 +303,7 @@ Same as dashboard - download, print, copy URL
 **Design:**
 - Centered layout
 - Star emoji (⭐)
-- Large heading "TapQR Pro"
+- Large heading "StarQR Pro"
 - $9/month pricing
 - "Cancel anytime" notice
 
