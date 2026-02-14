@@ -30,7 +30,7 @@ export default function BillingPage() {
 
       const { data: merchant } = await supabase
         .from('merchants')
-        .select('plan_tier, subscription_status, subscription_current_period_end')
+        .select('id, plan_tier, subscription_status, subscription_current_period_end')
         .eq('user_id', user.id)
         .single();
 
