@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { generateSlug } from '@/lib/slug';
 
 export default function Settings() {
   const router = useRouter();
@@ -12,8 +13,8 @@ export default function Settings() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const [merchantId, setMerchantId] = useState('');
-  const [userId, setUserId] = useState('');
   const [businessName, setBusinessName] = useState('');
+  const [slug, setSlug] = useState('');
   const [businessType, setBusinessType] = useState<'coffee' | 'ice_cream' | 'bagel' | 'other'>('coffee');
   const [rewardText, setRewardText] = useState('');
   const [stampsNeeded, setStampsNeeded] = useState(10);
@@ -29,8 +30,6 @@ export default function Settings() {
         return;
       }
 
-      setUserId(user.id);
-
       const { data: merchant, error } = await supabase
         .from('merchants')
         .select('*')
@@ -45,12 +44,14 @@ export default function Settings() {
 
       setMerchantId(merchant.id);
       setBusinessName(merchant.business_name);
+      const merchantSlug = generateSlug(merchant.business_name);
+      setSlug(merchantSlug);
       setBusinessType(merchant.business_type || 'coffee');
       setRewardText(merchant.reward_text);
       setStampsNeeded(merchant.stamps_needed);
       
       const QRCode = (await import('qrcode')).default;
-      const url = `${window.location.origin}/c/${merchant.id}`;
+      const url = `${window.location.origin}/c/${merchantSlug}`;
       const code = await QRCode.toDataURL(url, { width: 400, margin: 2 });
       setQr(code);
       
@@ -89,11 +90,12 @@ export default function Settings() {
   };
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure? This will permanently delete your account and all customer data. This cannot be undone.')) {
-      return;
-    }
+    const confirmText = 'DELETE';
+    const userInput = prompt(
+      `This will permanently delete your account and all customer data.\n\nType "${confirmText}" to confirm:`
+    );
 
-    if (!confirm('Final warning: Delete everything including all customer stamps and rewards?')) {
+    if (userInput !== confirmText) {
       return;
     }
 
@@ -102,7 +104,17 @@ export default function Settings() {
     try {
       const supabase = createClient();
       
-      // First delete merchant (cascades to customers, check-ins, rewards due to foreign key)
+      // Delete all related data first (customers will cascade check_ins and rewards)
+      const { error: customersError } = await supabase
+        .from('customers')
+        .delete()
+        .eq('merchant_id', merchantId);
+
+      if (customersError) {
+        console.error('Customers delete error:', customersError);
+      }
+
+      // Delete merchant
       const { error: merchantError } = await supabase
         .from('merchants')
         .delete()
@@ -115,19 +127,21 @@ export default function Settings() {
         return;
       }
 
-      // Then delete the auth user
-      const { error: authError } = await supabase.auth.admin.deleteUser(userId);
-      
-      if (authError) {
-        console.error('Auth delete error:', authError);
-        // Still sign out even if auth delete fails
+      // Delete auth user (requires service role key on server)
+      // Since we can't use admin.deleteUser from client, we'll call an API route
+      const deleteUserResponse = await fetch('/api/user/delete', {
+        method: 'DELETE',
+      });
+
+      if (!deleteUserResponse.ok) {
+        console.error('User delete failed');
       }
 
       // Sign out
       await supabase.auth.signOut();
       
-      // Redirect to home
-      window.location.href = '/';
+      // Force redirect
+      window.location.href = '/?deleted=true';
     } catch (error) {
       console.error('Delete error:', error);
       alert('Failed to delete account. Please contact support.');
@@ -192,39 +206,23 @@ export default function Settings() {
   const typeOptions = [
     { 
       value: 'coffee', 
-      label: 'Coffee', 
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-      )
+      label: 'Coffee Shop',
+      emoji: '☕'
     },
     { 
       value: 'ice_cream', 
       label: 'Ice Cream',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-        </svg>
-      )
+      emoji: '🍦'
     },
     { 
       value: 'bagel', 
-      label: 'Bagel',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-        </svg>
-      )
+      label: 'Bakery',
+      emoji: '🥯'
     },
     { 
       value: 'other', 
       label: 'Other',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-        </svg>
-      )
+      emoji: '🏪'
     },
   ] as const;
 
@@ -253,20 +251,20 @@ export default function Settings() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium mb-2 text-slate-700">Category</label>
+              <label className="block text-xs font-medium mb-2 text-slate-700">Business type</label>
               <div className="grid grid-cols-2 gap-2.5">
                 {typeOptions.map((opt) => (
                   <button
                     key={opt.value}
                     type="button"
                     onClick={() => setBusinessType(opt.value)}
-                    className={`p-3 border rounded-lg text-left transition-all flex items-center gap-3 ${
+                    className={`p-3 border rounded-lg text-left transition-all ${
                       businessType === opt.value
                         ? 'border-slate-900 bg-slate-50'
                         : 'border-slate-200 hover:border-slate-300 bg-white'
                     }`}
                   >
-                    <div className="text-slate-700">{opt.icon}</div>
+                    <div className="text-2xl mb-1">{opt.emoji}</div>
                     <div className="text-xs font-medium text-slate-900">{opt.label}</div>
                   </button>
                 ))}
@@ -333,7 +331,7 @@ export default function Settings() {
               <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
                 <p className="text-xs text-slate-600 mb-2 font-medium">Check-in URL:</p>
                 <code className="text-xs bg-white px-3 py-2 rounded block overflow-x-auto border border-slate-200">
-                  {window.location.origin}/c/{merchantId}
+                  {window.location.origin}/c/{slug}
                 </code>
               </div>
 

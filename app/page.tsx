@@ -41,12 +41,13 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1 rounded-full mb-8">
-              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-              QR-based loyalty for local shops
+              {/* <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> */}
+              {/* QR-based loyalty for local shops */}
             </div>
             
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-slate-900 mb-6">
-              Digital Loyalty Cards<br />That Customers Love
+              {/* Digital Loyalty Cards<br />That Customers Love */}
+              QR-based Loyalty
             </h1>
             
             <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -156,7 +157,7 @@ export default function Home() {
               </div>
               <h3 className="text-lg font-semibold text-slate-900 mb-2">Quick Setup</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
-                Create account, customize your reward, print QR code. Launch in under 5 minutes.
+                Create account, customize your reward, print QR code. Launch in 5 minutes.
               </p>
             </div>
           </div>

@@ -220,27 +220,11 @@ export default function BillingPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-green-500">✓</span>
-                    <span>Stamp cards</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm">
-                    <span className="text-green-500">✓</span>
                     <span>QR code generation</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-green-500">✓</span>
                     <span>Basic dashboard</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm">
-                    <span className="text-gray-400">✗</span>
-                    <span className="text-gray-500">Unlimited customers</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm">
-                    <span className="text-gray-400">✗</span>
-                    <span className="text-gray-500">Customer export</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm">
-                    <span className="text-gray-400">✗</span>
-                    <span className="text-gray-500">Priority support</span>
                   </li>
                 </ul>
               </div>
@@ -268,19 +252,7 @@ export default function BillingPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-green-500">✓</span>
-                    <span>Customer export (CSV)</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm">
-                    <span className="text-green-500">✓</span>
-                    <span>Advanced analytics</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm">
-                    <span className="text-green-500">✓</span>
                     <span>Priority email support</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm">
-                    <span className="text-green-500">✓</span>
-                    <span>Free QR sticker</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-green-500">✓</span>

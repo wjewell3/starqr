@@ -110,17 +110,18 @@ rewards
 ### Fixes needed
 - Delete account not actually deleting (still able to sign in - needs to delete from database)
 - icons on /dashboard/settings need to better reflect the customer type (could be better icons or emojis)
+- http://localhost:3000/dashboard/upgrade should show free tier vs paid (FAQ should be in a different page - i.e. a header)
+- Privacy link works and is filled out correctly
+- Terms link works and is filled out correctly
+
 
 ### ❌ Not Yet Implemented
-- Real-time analytics (just monthly totals)
-- Offline support (check-ins require internet)
-- GDPR compliance tooling
-- Custom rewards (only stamp-based)
+- making sure future implementation of digital wallet is seamless (Phone is just one authentication method) - that way adding digital wallets later doesn't break things
+- Tiered rewards (i.e. cash out for coffee at 5 stamps, or latte at 10)
 - Advanced analytics (trends, graphs, insights)
-- Customer export
-- Email notifications
 - Multiple locations per merchant
-- Staff accounts
+- discount for annual billing ($99 annually)
+- custom email domain
 
 ## Privacy & Security
 

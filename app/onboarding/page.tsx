@@ -42,10 +42,10 @@ export default function Onboarding() {
   }, [router]);
 
   const typeOptions = [
-    { value: 'coffee', label: 'Coffee', color: 'from-amber-500 to-orange-500', reward: 'Free Coffee' },
-    { value: 'ice_cream', label: 'Ice Cream', color: 'from-pink-500 to-rose-500', reward: 'Free Ice Cream' },
-    { value: 'bagel', label: 'Bagel', color: 'from-yellow-500 to-amber-500', reward: 'Free Bagel' },
-    { value: 'other', label: 'Other', color: 'from-slate-500 to-slate-600', reward: 'Free Item' },
+    { value: 'coffee', label: 'Coffee Shop', emoji: '☕', reward: 'Free Coffee' },
+    { value: 'ice_cream', label: 'Ice Cream', emoji: '🍦', reward: 'Free Ice Cream' },
+    { value: 'bagel', label: 'Bakery', emoji: '🥯', reward: 'Free Bagel' },
+    { value: 'other', label: 'Other', emoji: '🏪', reward: 'Free Item' },
   ] as const;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -114,7 +114,7 @@ export default function Onboarding() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium mb-2 text-slate-700">Category</label>
+              <label className="block text-xs font-medium mb-2 text-slate-700">Business type</label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
                 {typeOptions.map((opt) => (
                   <button
@@ -130,7 +130,7 @@ export default function Onboarding() {
                         : 'border-slate-200 hover:border-slate-300 bg-white'
                     }`}
                   >
-                    <div className={`w-8 h-8 bg-gradient-to-br ${opt.color} rounded-md mb-2`}></div>
+                    <div className="text-2xl mb-1">{opt.emoji}</div>
                     <div className="text-xs font-medium text-slate-900">{opt.label}</div>
                   </button>
                 ))}

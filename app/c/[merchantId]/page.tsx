@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 
 interface CheckInData {
@@ -12,11 +12,35 @@ interface CheckInData {
 
 export default function CheckIn() {
   const params = useParams();
-  const merchantId = params.merchantId as string;
+  const slug = params.merchantId as string;
+  const [merchantId, setMerchantId] = useState('');
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [data, setData] = useState<CheckInData | null>(null);
+  const [lookupError, setLookupError] = useState('');
+
+  // Lookup merchant ID from slug on mount
+  useEffect(() => {
+    const lookupMerchant = async () => {
+      try {
+        const res = await fetch(`/api/merchant/lookup?slug=${encodeURIComponent(slug)}`);
+        const result = await res.json();
+
+        if (!res.ok || !result.id) {
+          setLookupError('Business not found');
+          return;
+        }
+
+        setMerchantId(result.id);
+      } catch (err) {
+        console.error('Lookup failed:', err);
+        setLookupError('Failed to load business info');
+      }
+    };
+
+    lookupMerchant();
+  }, [slug]);
 
   const formatPhone = (value: string) => {
     const cleaned = value.replace(/\D/g, '').slice(0, 10);
@@ -27,6 +51,12 @@ export default function CheckIn() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!merchantId) {
+      setError('Business info not loaded yet');
+      return;
+    }
+    
     const cleaned = phone.replace(/\D/g, '');
     
     if (cleaned.length !== 10) {
@@ -135,13 +165,20 @@ export default function CheckIn() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold mb-1.5 text-slate-900">Check in</h1>
-          <p className="text-sm text-slate-600">Enter your number to earn a stamp</p>
-        </div>
+        {lookupError ? (
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200 text-center">
+            <h1 className="text-2xl font-semibold mb-2 text-slate-900">Business not found</h1>
+            <p className="text-sm text-slate-600">{lookupError}</p>
+          </div>
+        ) : (
+          <>
+            <div className="text-center mb-8">
+              <h1 className="text-2xl font-semibold mb-1.5 text-slate-900">Check in</h1>
+              <p className="text-sm text-slate-600">Enter your number to earn a stamp</p>
+            </div>
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
-          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
+              <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="tel"
               placeholder="(555) 123-4567"
@@ -159,17 +196,19 @@ export default function CheckIn() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !merchantId}
               className="w-full bg-slate-900 text-white py-2.5 text-sm rounded-md hover:bg-slate-800 disabled:opacity-60 transition-colors font-medium"
             >
-              {loading ? 'Checking in...' : 'Continue'}
+              {loading ? 'Checking in...' : !merchantId ? 'Loading...' : 'Continue'}
             </button>
           </form>
 
           <p className="text-xs text-slate-500 text-center mt-4">
             Number is encrypted and private
           </p>
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
