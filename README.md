@@ -1,6 +1,6 @@
 # StarQR Loyalty - QR-Based Loyalty System
 
-A modern, QR-based loyalty card system for small businesses like coffee shops, ice cream parlors, and bagel shops. Customers scan a QR code, enter their phone number, and earn stamps toward free rewards.
+A modern, QR-based loyalty card system for small businesses like coffee shops, ice cream parlors, and bagel shops. Customers scan a QR code, enter their phone number, and earn stamps toward free rewards. 
 
 ## Features
 

@@ -1,155 +1,327 @@
-import Link from 'next/link';
+'use client';
 
-export default function Home() {
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+
+export default function Settings() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const [merchantId, setMerchantId] = useState('');
+  const [businessName, setBusinessName] = useState('');
+  const [businessType, setBusinessType] = useState<'coffee' | 'ice_cream' | 'bagel' | 'other'>('coffee');
+  const [rewardText, setRewardText] = useState('');
+  const [stampsNeeded, setStampsNeeded] = useState(10);
+  const [qr, setQr] = useState('');
+
+  useEffect(() => {
+    const init = async () => {
+      const supabase = createClient();
+      
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push('/login');
+        return;
+      }
+
+      const { data: merchant, error } = await supabase
+        .from('merchants')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      if (error || !merchant) {
+        console.error('Failed to fetch merchant:', error);
+        setLoading(false);
+        return;
+      }
+
+      setMerchantId(merchant.id);
+      setBusinessName(merchant.business_name);
+      setBusinessType(merchant.business_type || 'coffee');
+      setRewardText(merchant.reward_text);
+      setStampsNeeded(merchant.stamps_needed);
+      
+      const QRCode = (await import('qrcode')).default;
+      const url = `${window.location.origin}/c/${merchant.id}`;
+      const code = await QRCode.toDataURL(url, { width: 400, margin: 2 });
+      setQr(code);
+      
+      setLoading(false);
+    };
+
+    init();
+  }, [router]);
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMessage(null);
+    setSaving(true);
+
+    const supabase = createClient();
+
+    const { error } = await supabase
+      .from('merchants')
+      .update({
+        business_name: businessName.trim(),
+        business_type: businessType,
+        reward_text: rewardText.trim(),
+        stamps_needed: stampsNeeded,
+      })
+      .eq('id', merchantId);
+
+    setSaving(false);
+
+    if (error) {
+      setMessage({ type: 'error', text: error.message });
+      return;
+    }
+
+    setMessage({ type: 'success', text: 'Settings saved' });
+    setTimeout(() => setMessage(null), 3000);
+  };
+
+  const handleDelete = async () => {
+    if (!confirm('Are you sure? This will permanently delete your account and all customer data. This cannot be undone.')) {
+      return;
+    }
+
+    if (!confirm('This is your last chance. Delete everything?')) {
+      return;
+    }
+
+    setDeleting(true);
+
+    try {
+      const supabase = createClient();
+      
+      // Delete merchant (cascades to customers, check-ins, rewards)
+      const { error: deleteError } = await supabase
+        .from('merchants')
+        .delete()
+        .eq('id', merchantId);
+
+      if (deleteError) {
+        alert('Failed to delete account. Please contact support.');
+        setDeleting(false);
+        return;
+      }
+
+      // Sign out
+      await supabase.auth.signOut();
+      router.push('/');
+    } catch (error) {
+      alert('Failed to delete account. Please contact support.');
+      setDeleting(false);
+    }
+  };
+
+  const downloadQR = () => {
+    if (!qr) return;
+    const link = document.createElement('a');
+    link.download = `${businessName.replace(/\s+/g, '-')}-qr-code.png`;
+    link.href = qr;
+    link.click();
+  };
+
+  const printQR = () => {
+    if (!qr) return;
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${businessName} - QR Code</title>
+          <style>
+            body {
+              margin: 0;
+              padding: 40px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              font-family: system-ui, sans-serif;
+            }
+            h1 { margin-bottom: 10px; text-align: center; font-size: 32px; }
+            h2 { margin-bottom: 30px; text-align: center; font-size: 20px; color: #666; }
+            img { max-width: 400px; width: 100%; }
+            .instructions { text-align: center; margin-top: 30px; color: #666; }
+          </style>
+        </head>
+        <body>
+          <h1>${businessName}</h1>
+          <h2>Scan to earn rewards</h2>
+          <img src="${qr}" alt="QR Code" />
+          <div class="instructions">
+            <p><strong>How it works:</strong></p>
+            <p>Scan with phone camera • Enter number • Earn stamps</p>
+          </div>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+  };
+
+  if (loading) {
+    return (
+      <div className="text-slate-400 text-sm">Loading...</div>
+    );
+  }
+
+  const typeOptions = [
+    { value: 'coffee', label: 'Coffee', color: 'from-amber-500 to-orange-500' },
+    { value: 'ice_cream', label: 'Ice Cream', color: 'from-pink-500 to-rose-500' },
+    { value: 'bagel', label: 'Bagel', color: 'from-yellow-500 to-amber-500' },
+    { value: 'other', label: 'Other', color: 'from-slate-500 to-slate-600' },
+  ] as const;
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
-      <nav className="border-b border-slate-200/60 backdrop-blur-sm bg-white/80 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="font-medium text-slate-900">StarQR</div>
-          <div className="flex gap-6 items-center">
-            <Link href="/login" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
-              Sign in
-            </Link>
-            <Link 
-              href="/signup"
-              className="text-sm bg-slate-900 text-white px-4 py-1.5 rounded-md hover:bg-slate-800 transition-colors"
-            >
-              Get started
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold mb-1 text-slate-900">Settings</h1>
+        <p className="text-slate-600 text-sm">Manage your loyalty program</p>
+      </div>
 
-      <section className="max-w-5xl mx-auto px-6 pt-24 pb-16">
-        <div className="max-w-2xl">
-          <div className="inline-block px-3 py-1 bg-blue-100/60 text-blue-900 text-xs font-medium rounded-full mb-6">
-            Digital loyalty for local shops
-          </div>
-          <h1 className="text-5xl font-semibold tracking-tight text-slate-900 mb-5 leading-tight">
-            Customer loyalty without the complexity
-          </h1>
-          <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-            QR-based stamps that work with a phone camera. No app download, 
-            no punch cards. Just fast check-ins and automatic rewards.
-          </p>
-          <div className="flex gap-3 items-center">
-            <Link 
-              href="/signup"
-              className="bg-slate-900 text-white px-5 py-2.5 rounded-md hover:bg-slate-800 transition-colors font-medium text-sm"
-            >
-              Start free trial
-            </Link>
-            <Link 
-              href="/dashboard/upgrade"
-              className="text-slate-700 hover:text-slate-900 transition-colors font-medium text-sm px-5 py-2.5"
-            >
-              View pricing →
-            </Link>
-          </div>
-          <p className="text-xs text-slate-500 mt-5">
-            Free for 25 customers · No card required
-          </p>
-        </div>
-      </section>
+      <div className="grid lg:grid-cols-2 gap-8">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
+          <h2 className="font-semibold text-lg mb-6 text-slate-900">Business Information</h2>
+          
+          <form onSubmit={handleSave} className="space-y-6">
+            <div>
+              <label className="block text-xs font-medium mb-2 text-slate-700">Business name</label>
+              <input
+                type="text"
+                value={businessName}
+                onChange={(e) => setBusinessName(e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+                required
+                maxLength={100}
+              />
+            </div>
 
-      <section className="max-w-5xl mx-auto px-6 py-20">
-        <div className="grid md:grid-cols-3 gap-12">
-          <div>
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg mb-4"></div>
-            <h3 className="font-medium text-base mb-2 text-slate-900">No app required</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Phone camera scans code, customer taps number. Works instantly with any smartphone.
-            </p>
-          </div>
-          <div>
-            <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-violet-600 rounded-lg mb-4"></div>
-            <h3 className="font-medium text-base mb-2 text-slate-900">Live in minutes</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Generate QR code, print it, display at register. Your program launches today.
-            </p>
-          </div>
-          <div>
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg mb-4"></div>
-            <h3 className="font-medium text-base mb-2 text-slate-900">Transparent pricing</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Free tier for 25 customers. Scale to unlimited for $9/month. No hidden fees.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-slate-200/60 bg-white/60 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto px-6 py-20">
-          <div className="max-w-lg">
-            <h2 className="text-2xl font-semibold mb-10 text-slate-900">How it works</h2>
-            <div className="space-y-8">
-              <div className="flex gap-5">
-                <div className="w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
-                  1
-                </div>
-                <div>
-                  <h3 className="font-medium text-sm mb-1.5 text-slate-900">Customer scans QR</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    Print code, place on counter. Camera detects and opens instantly.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-5">
-                <div className="w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
-                  2
-                </div>
-                <div>
-                  <h3 className="font-medium text-sm mb-1.5 text-slate-900">Enter phone number</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    Fast entry, hashed storage. Only last 4 digits visible to you.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-5">
-                <div className="w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">
-                  3
-                </div>
-                <div>
-                  <h3 className="font-medium text-sm mb-1.5 text-slate-900">Earn rewards</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    Stamps accumulate automatically. Free item after target reached.
-                  </p>
-                </div>
+            <div>
+              <label className="block text-xs font-medium mb-2 text-slate-700">Category</label>
+              <div className="grid grid-cols-2 gap-2.5">
+                {typeOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setBusinessType(opt.value)}
+                    className={`p-3 border rounded-lg text-left transition-all ${
+                      businessType === opt.value
+                        ? 'border-slate-900 bg-slate-50'
+                        : 'border-slate-200 hover:border-slate-300 bg-white'
+                    }`}
+                  >
+                    <div className={`w-8 h-8 bg-gradient-to-br ${opt.color} rounded-md mb-2`}></div>
+                    <div className="text-xs font-medium text-slate-900">{opt.label}</div>
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="max-w-5xl mx-auto px-6 py-20">
-        <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-12 text-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-grid-white/5"></div>
-          <div className="relative">
-            <h2 className="text-3xl font-semibold mb-3">
-              Build customer retention that works
-            </h2>
-            <p className="text-lg text-slate-300 mb-8 max-w-lg">
-              Most loyalty programs fail because they're annoying. StarQR removes all friction.
-            </p>
-            <Link 
-              href="/signup"
-              className="inline-block bg-white text-slate-900 px-5 py-2.5 rounded-md hover:bg-slate-100 transition-colors font-medium text-sm"
+            <div>
+              <label className="block text-xs font-medium mb-2 text-slate-700">Reward</label>
+              <input
+                type="text"
+                value={rewardText}
+                onChange={(e) => setRewardText(e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+                required
+                maxLength={50}
+              />
+              <p className="text-xs text-slate-500 mt-1.5">What customers earn</p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium mb-2 text-slate-700">
+                Stamps required: {stampsNeeded}
+              </label>
+              <input
+                type="range"
+                min={5}
+                max={20}
+                value={stampsNeeded}
+                onChange={(e) => setStampsNeeded(parseInt(e.target.value))}
+                className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-slate-900"
+              />
+              <p className="text-xs text-slate-500 mt-1.5">Visits needed for reward</p>
+            </div>
+
+            {message && (
+              <div className={`text-xs px-3 py-2 rounded-md ${
+                message.type === 'success'
+                  ? 'bg-green-50 border border-green-200 text-green-800'
+                  : 'bg-red-50 border border-red-200 text-red-800'
+              }`}>
+                {message.text}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={saving}
+              className="w-full bg-slate-900 text-white py-2.5 text-sm rounded-md hover:bg-slate-800 disabled:opacity-60 transition-colors font-medium"
             >
-              Get started free
-            </Link>
-          </div>
+              {saving ? 'Saving...' : 'Save changes'}
+            </button>
+          </form>
         </div>
-      </section>
 
-      <footer className="border-t border-slate-200/60">
-        <div className="max-w-5xl mx-auto px-6 py-10 flex justify-between items-center text-xs text-slate-500">
-          <div>© 2026 StarQR</div>
-          <div className="flex gap-6">
-            <Link href="/dashboard/upgrade" className="hover:text-slate-900 transition-colors">Pricing</Link>
-            <Link href="/login" className="hover:text-slate-900 transition-colors">Sign in</Link>
-          </div>
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
+          <h2 className="font-semibold text-lg mb-6 text-slate-900">QR Code</h2>
+          
+          {qr && (
+            <div className="space-y-4">
+              <div className="bg-white p-6 rounded-lg border border-slate-200 flex justify-center">
+                <img src={qr} alt="QR Code" className="w-64 h-64" />
+              </div>
+
+              <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                <p className="text-xs text-slate-600 mb-2 font-medium">Check-in URL:</p>
+                <code className="text-xs bg-white px-3 py-2 rounded block overflow-x-auto border border-slate-200">
+                  {window.location.origin}/c/{merchantId}
+                </code>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={downloadQR}
+                  className="flex-1 border border-slate-300 px-4 py-2.5 text-sm rounded-md hover:border-slate-400 transition-colors font-medium"
+                >
+                  Download
+                </button>
+                <button
+                  onClick={printQR}
+                  className="flex-1 border border-slate-300 px-4 py-2.5 text-sm rounded-md hover:border-slate-400 transition-colors font-medium"
+                >
+                  Print
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      </footer>
-    </main>
+      </div>
+
+      <div className="bg-red-50 rounded-xl p-6 border-2 border-red-200">
+        <h2 className="font-semibold text-lg mb-2 text-red-900">Danger Zone</h2>
+        <p className="text-sm text-red-700 mb-4">
+          Permanently delete your account and all customer data. This cannot be undone.
+        </p>
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className="bg-red-600 text-white px-4 py-2 text-sm rounded-md hover:bg-red-700 disabled:opacity-60 transition-colors font-medium"
+        >
+          {deleting ? 'Deleting...' : 'Delete account'}
+        </button>
+      </div>
+    </div>
   );
 }
