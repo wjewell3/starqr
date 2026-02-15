@@ -3,10 +3,8 @@
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function UpgradePage() {
+export default function Upgrade() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const canceled = searchParams.get('canceled') === 'true';
@@ -24,213 +22,115 @@ export default function UpgradePage() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert('Failed to start checkout');
+        alert('Failed to start checkout. Please contact support.');
         setLoading(false);
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('Failed to start checkout');
+      alert('Failed to start checkout. Please contact support.');
       setLoading(false);
     }
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Upgrade to Pro</h1>
-        <p className="text-xl text-gray-600">Unlock unlimited customers and premium features</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
+      <nav className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-center justify-between h-14">
+            <Link href="/dashboard" className="font-medium text-slate-900">
+              StarQR
+            </Link>
+            <Link href="/dashboard" className="text-sm text-slate-600 hover:text-slate-900">
+              ← Back to dashboard
+            </Link>
+          </div>
+        </div>
+      </nav>
 
-      {/* Canceled Message */}
-      {canceled && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <p className="text-sm text-yellow-800">
-            ⚠️ Checkout was canceled. You can upgrade anytime!
+      <div className="max-w-4xl mx-auto px-6 py-16">
+        {canceled && (
+          <div className="mb-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
+            <p className="text-sm text-yellow-800">
+              Checkout was canceled. You can upgrade anytime.
+            </p>
+          </div>
+        )}
+
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-slate-900 mb-3">Upgrade to Pro</h1>
+          <p className="text-lg text-slate-600">
+            Unlock unlimited customers and premium features
           </p>
         </div>
-      )}
 
-      {/* Pricing Card */}
-      <div className="max-w-2xl mx-auto">
-        <Card className="border-2 border-amber-500 shadow-xl">
-          <CardHeader className="text-center bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-200">
-            <div className="text-6xl mb-4">⭐</div>
-            <CardTitle className="text-3xl">StarQR Pro</CardTitle>
-            <CardDescription className="text-lg mt-2">
-              Everything you need to reward your customers
-            </CardDescription>
-            <div className="mt-6">
-              <span className="text-5xl font-bold text-gray-900">$9</span>
-              <span className="text-xl text-gray-600">/month</span>
-            </div>
-            <p className="text-sm text-gray-600 mt-2">Cancel anytime • No contracts</p>
-          </CardHeader>
-          <CardContent className="p-8">
-            {/* Features List */}
-            <div className="space-y-4 mb-8">
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm">✓</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Unlimited Customers</p>
-                  <p className="text-sm text-gray-600">No more 25 customer limit</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm">✓</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Customer Export</p>
-                  <p className="text-sm text-gray-600">Download your customer list as CSV</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm">✓</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Advanced Analytics</p>
-                  <p className="text-sm text-gray-600">Track trends and customer behavior</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm">✓</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Priority Support</p>
-                  <p className="text-sm text-gray-600">Get help when you need it</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm">✓</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Free QR Sticker</p>
-                  <p className="text-sm text-gray-600">Professional weatherproof sticker shipped free</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm">✓</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Early Access</p>
-                  <p className="text-sm text-gray-600">Try new features before everyone else</p>
-                </div>
-              </div>
-            </div>
-
-            {/* CTA Button */}
-            <Button
-              onClick={handleUpgrade}
-              disabled={loading}
-              size="lg"
-              className="w-full text-lg h-14"
-            >
-              {loading ? 'Redirecting to checkout...' : 'Upgrade Now →'}
-            </Button>
-
-            <p className="text-xs text-center text-gray-500 mt-4">
-              Secure payment powered by Stripe • Cancel anytime
+        {/* FAQ at top */}
+        <div className="mb-12 grid md:grid-cols-3 gap-6">
+          <div className="bg-white/60 backdrop-blur-sm rounded-lg p-6 border border-slate-200">
+            <h3 className="font-semibold text-slate-900 mb-2 text-sm">Can I cancel anytime?</h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Yes. Cancel with one click. You keep Pro features until the end of your billing period.
             </p>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
 
-      {/* Testimonials/Social Proof */}
-      <div className="max-w-2xl mx-auto">
-        <Card>
-          <CardHeader>
-            <CardTitle>Join 100+ businesses already using StarQR Pro</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <div className="border-l-4 border-amber-500 pl-4">
-                <p className="text-gray-700 italic mb-2">
-                  "Upgrading to Pro was a no-brainer once we hit 20 customers. 
-                  The customer export feature alone saves us hours every month."
-                </p>
-                <p className="text-sm text-gray-600">— Sarah M., Bright Day Coffee</p>
-              </div>
+          <div className="bg-white/60 backdrop-blur-sm rounded-lg p-6 border border-slate-200">
+            <h3 className="font-semibold text-slate-900 mb-2 text-sm">What about my data?</h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              All existing customers and stamps are preserved. You just remove the 25 customer limit.
+            </p>
+          </div>
 
-              <div className="border-l-4 border-amber-500 pl-4">
-                <p className="text-gray-700 italic mb-2">
-                  "We see about 100 check-ins per week now. The analytics help us 
-                  understand our busiest times and reward our most loyal customers."
-                </p>
-                <p className="text-sm text-gray-600">— Mike T., Sweet Scoops Ice Cream</p>
-              </div>
+          <div className="bg-white/60 backdrop-blur-sm rounded-lg p-6 border border-slate-200">
+            <h3 className="font-semibold text-slate-900 mb-2 text-sm">Need help deciding?</h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Start with the free tier. Upgrade when you hit 20 customers and need more capacity.
+            </p>
+          </div>
+        </div>
 
-              <div className="border-l-4 border-amber-500 pl-4">
-                <p className="text-gray-700 italic mb-2">
-                  "Best $9/month we spend. Our regulars love the simplicity 
-                  and we love seeing them come back."
-                </p>
-                <p className="text-sm text-gray-600">— Alex K., The Bagel Hub</p>
-              </div>
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl border-2 border-slate-900 shadow-xl p-8 md:p-12">
+          <div className="flex items-start justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-bold text-slate-900 mb-2">Pro Plan</h2>
+              <p className="text-slate-600">Everything you need to scale</p>
             </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* FAQ */}
-      <div className="max-w-2xl mx-auto">
-        <Card>
-          <CardHeader>
-            <CardTitle>Frequently Asked Questions</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <p className="font-semibold text-gray-900 mb-1">Can I cancel anytime?</p>
-                <p className="text-sm text-gray-600">
-                  Yes! Cancel anytime with no penalties. You'll keep Pro features until 
-                  the end of your billing period.
-                </p>
-              </div>
-
-              <div>
-                <p className="font-semibold text-gray-900 mb-1">What happens to my existing customers?</p>
-                <p className="text-sm text-gray-600">
-                  Nothing changes! All your existing customers and their stamps are preserved. 
-                  You just get the ability to add unlimited new customers.
-                </p>
-              </div>
-
-              <div>
-                <p className="font-semibold text-gray-900 mb-1">Do I get a discount for annual billing?</p>
-                <p className="text-sm text-gray-600">
-                  Not yet, but we're working on it! We'll email you when annual plans become available.
-                </p>
-              </div>
-
-              <div>
-                <p className="font-semibold text-gray-900 mb-1">What payment methods do you accept?</p>
-                <p className="text-sm text-gray-600">
-                  We accept all major credit cards through Stripe. Your payment information 
-                  is secure and never stored on our servers.
-                </p>
-              </div>
+            <div className="text-right">
+              <div className="text-5xl font-bold text-slate-900">$9</div>
+              <div className="text-slate-600">/month</div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
 
-      {/* Back Link */}
-      <div className="text-center">
-        <Link href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">
-          ← Back to Dashboard
-        </Link>
+          <div className="space-y-4 mb-8">
+            {[
+              'Unlimited customers',
+              'Advanced analytics and insights',
+              'Customer export (CSV)',
+              'Priority email support',
+              'Custom branding options',
+              'Early access to new features',
+            ].map((feature) => (
+              <div key={feature} className="flex items-start gap-3">
+                <div className="w-5 h-5 bg-slate-900 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span className="text-slate-700">{feature}</span>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={handleUpgrade}
+            disabled={loading}
+            className="w-full bg-slate-900 text-white py-3.5 rounded-lg hover:bg-slate-800 disabled:opacity-60 transition-colors font-semibold text-lg"
+          >
+            {loading ? 'Redirecting to checkout...' : 'Upgrade now'}
+          </button>
+
+          <p className="text-xs text-slate-500 text-center mt-4">
+            Cancel anytime · No contracts · Secure payment via Stripe
+          </p>
+        </div>
       </div>
     </div>
   );
