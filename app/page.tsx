@@ -5,7 +5,7 @@ export default function Home() {
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
       <nav className="border-b border-slate-200/60 backdrop-blur-sm bg-white/80 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="font-medium text-slate-900">TapQR</div>
+          <div className="font-medium text-slate-900">StarQR</div>
           <div className="flex gap-6 items-center">
             <Link href="/login" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
               Sign in
