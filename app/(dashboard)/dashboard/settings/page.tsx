@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { generateSlug } from '@/lib/slug';
+import { generateUniqueSlug } from '@/lib/slug';
 
 export default function Settings() {
   const router = useRouter();
@@ -44,7 +44,7 @@ export default function Settings() {
 
       setMerchantId(merchant.id);
       setBusinessName(merchant.business_name);
-      const merchantSlug = generateSlug(merchant.business_name);
+      const merchantSlug = generateUniqueSlug(merchant.business_name, merchant.id);
       setSlug(merchantSlug);
       setBusinessType(merchant.business_type || 'coffee');
       setRewardText(merchant.reward_text);

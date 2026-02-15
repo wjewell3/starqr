@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/admin';
-import { generateSlug } from '@/lib/slug';
+import { generateUniqueSlug } from '@/lib/slug';
 
 export async function GET(req: NextRequest) {
   try {
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const merchant = merchants.find(m => generateSlug(m.business_name) === slug);
+    const merchant = merchants.find(m => generateUniqueSlug(m.business_name, m.id) === slug);
 
     if (!merchant) {
       return NextResponse.json(

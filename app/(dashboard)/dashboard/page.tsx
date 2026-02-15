@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { generateSlug } from '@/lib/slug';
+import { generateUniqueSlug } from '@/lib/slug';
 
 interface Stats {
   totalCustomers: number;
@@ -41,7 +41,7 @@ export default function Dashboard() {
         if (merchant) {
           setMerchantId(merchant.id);
           setBusinessName(merchant.business_name);
-          const merchantSlug = generateSlug(merchant.business_name);
+          const merchantSlug = generateUniqueSlug(merchant.business_name, merchant.id);
           setSlug(merchantSlug);
           
           const QRCode = (await import('qrcode')).default;

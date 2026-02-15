@@ -11,3 +11,13 @@ export function generateSlug(businessName: string): string {
     .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
     .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
 }
+
+/**
+ * Generate a unique slug with merchant ID suffix to prevent collisions
+ * Example: "the-coffee-shop-a7f3"
+ */
+export function generateUniqueSlug(businessName: string, merchantId: string): string {
+  const baseSlug = generateSlug(businessName);
+  const suffix = merchantId.split('-')[0].slice(0, 4); // First 4 chars of UUID
+  return `${baseSlug}-${suffix}`;
+}
