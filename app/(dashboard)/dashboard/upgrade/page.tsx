@@ -75,11 +75,9 @@ export default function Upgrade() {
             <div className="space-y-3 mb-8">
               {[
                 'Up to 25 customers',
-                'QR code generation',
-                'Stamp-based rewards',
-                'Basic analytics',
-                'Phone number privacy',
-                'Email support',
+                'Unlimited stamps',
+                'QR code for your shop',
+                'Simple dashboard',
               ].map((feature) => (
                 <div key={feature} className="flex items-start gap-3">
                   <div className="w-5 h-5 bg-slate-900 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -118,10 +116,8 @@ export default function Upgrade() {
             <div className="space-y-3 mb-8">
               {[
                 'Unlimited customers',
-                'Everything in Free',
-                'Priority email support',
-                'Custom branding',
-                'Early access to features',
+                'Everything in Free Plan',
+                'Email support',
               ].map((feature) => (
                 <div key={feature} className="flex items-start gap-3">
                   <div className="w-5 h-5 bg-slate-900 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">

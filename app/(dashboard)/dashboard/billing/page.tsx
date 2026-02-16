@@ -220,11 +220,15 @@ export default function BillingPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-green-500">✓</span>
-                    <span>QR code generation</span>
+                    <span>Unlimited stamps</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-green-500">✓</span>
-                    <span>Basic dashboard</span>
+                    <span>QR code for your shop</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <span className="text-green-500">✓</span>
+                    <span>Simple dashboard</span>
                   </li>
                 </ul>
               </div>
@@ -248,15 +252,11 @@ export default function BillingPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-green-500">✓</span>
-                    <span>All free features</span>
+                    <span>Everything in Free Plan</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-green-500">✓</span>
-                    <span>Priority email support</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm">
-                    <span className="text-green-500">✓</span>
-                    <span>Early access to new features</span>
+                    <span>Email support</span>
                   </li>
                 </ul>
                 <Link href="/dashboard/upgrade" className="mt-6 block">
