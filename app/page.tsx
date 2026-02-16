@@ -164,6 +164,60 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="py-24 bg-slate-50">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              Why This Matters
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white rounded-xl p-8 border border-slate-200">
+              <div className="mb-6">
+                <div className="text-5xl font-bold text-slate-900 mb-3">39%</div>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  of customers abandon paper loyalty programs because they misplace their cards
+                </p>
+              </div>
+              <p className="text-xs text-slate-500">
+                <a href="https://www.stampme.com/blog/digital-vs-paper-punch-cards" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-slate-900 underline">
+                  StampMe
+                </a>
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 border border-slate-200">
+              <div className="mb-6">
+                <div className="text-5xl font-bold text-slate-900 mb-3">5-25x</div>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  more expensive to acquire a new customer than to keep an existing one
+                </p>
+              </div>
+              <p className="text-xs text-slate-500">
+                <a href="https://hbr.org/2014/10/the-value-of-keeping-the-right-customers" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-slate-900 underline">
+                  Harvard Business Review
+                </a>
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 border border-slate-200">
+              <div className="mb-6">
+                <div className="text-5xl font-bold text-slate-900 mb-3">25%</div>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  profit increase from a 5% increase in customer retention
+                </p>
+              </div>
+              <p className="text-xs text-slate-500">
+                <a href="https://media.bain.com/Images/BB_Prescription_cutting_costs.pdf" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-slate-900 underline">
+                  Bain & Company
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
