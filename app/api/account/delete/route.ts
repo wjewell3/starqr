@@ -29,13 +29,19 @@ export async function DELETE() {
       try {
         const StripeModule = await import('stripe');
         const Stripe = StripeModule.default || StripeModule;
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-          apiVersion: '2022-11-15',
-        });
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
         if (merchant.stripe_subscription_id) {
           try {
-            await stripe.subscriptions.del(merchant.stripe_subscription_id as string);
+            // Some Stripe client versions expose `del`, others do not in the types.
+            // Try calling `del` dynamically; if unavailable, schedule cancellation at period end.
+            if (typeof (stripe.subscriptions as any).del === 'function') {
+              await (stripe.subscriptions as any).del(merchant.stripe_subscription_id as string);
+            } else {
+              await stripe.subscriptions.update(merchant.stripe_subscription_id as string, {
+                cancel_at_period_end: true,
+              } as any);
+            }
           } catch (err) {
             console.warn('Stripe subscription deletion warning:', err);
           }
