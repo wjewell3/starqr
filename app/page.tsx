@@ -14,8 +14,11 @@ export default function Home() {
               <Link href="/about" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
                 About
               </Link>
-              <Link href="/dashboard/upgrade" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
+              <Link href="/pricing" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
                 Pricing
+              </Link>
+              <Link href="/faq" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
+                FAQ
               </Link>
             </div>
 
@@ -63,7 +66,7 @@ export default function Home() {
                 Get started free
               </Link>
               <Link 
-                href="/dashboard/upgrade"
+                href="/pricing"
                 className="border border-slate-300 px-6 py-3 rounded-lg hover:border-slate-400 transition-colors font-medium inline-flex items-center justify-center"
               >
                 View pricing
@@ -88,69 +91,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="p-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mb-4 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Easy QR Scanning</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Customers scan your QR code with their phone camera. Enter their number and earn a stamp instantly.
-              </p>
-            </div>
-
-            <div className="p-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-violet-500 to-violet-600 rounded-xl mb-4 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Stamp-Based Rewards</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Set how many stamps customers need (5-20 visits) and what they earn when they complete their card.
-              </p>
-            </div>
-
+          <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-8">
             <div className="p-6">
               <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl mb-4 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Track Your Progress</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                See how many customers you have, monthly check-ins, and rewards redeemed from your dashboard.
-              </p>
-            </div>
-
-            <div className="p-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl mb-4 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Privacy Protected</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Phone numbers are encrypted with SHA-256. You only see the last 4 digits for identification.
-              </p>
-            </div>
-
-            <div className="p-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl mb-4 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">No App Download</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Works with any smartphone camera. No app store visit, no account creation, no friction.
-              </p>
-            </div>
-
-            <div className="p-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl mb-4 flex items-center justify-center">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
@@ -160,60 +103,43 @@ export default function Home() {
                 Create account, customize your reward, print QR code. Launch in 5 minutes.
               </p>
             </div>
+            <div className="p-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mb-4 flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Easy QR Scanning</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Customers scan your QR code with their phone camera. No app download or account needed — enter a number and earn a stamp instantly.
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl mb-4 flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Stamp-Based Rewards</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Set how many stamps customers need (5-20 visits) and what they earn when they complete their card.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="py-24 bg-slate-50">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Why This Matters
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl p-8 border border-slate-200">
-              <div className="mb-6">
-                <div className="text-5xl font-bold text-slate-900 mb-3">39%</div>
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  of customers abandon paper loyalty programs because they misplace their cards
-                </p>
-              </div>
-              <p className="text-xs text-slate-500">
-                <a href="https://www.stampme.com/blog/digital-vs-paper-punch-cards" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-slate-900 underline">
-                  StampMe
-                </a>
-              </p>
-            </div>
-
-            <div className="bg-white rounded-xl p-8 border border-slate-200">
-              <div className="mb-6">
-                <div className="text-5xl font-bold text-slate-900 mb-3">5-25x</div>
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  more expensive to acquire a new customer than to keep an existing one
-                </p>
-              </div>
-              <p className="text-xs text-slate-500">
-                <a href="https://hbr.org/2014/10/the-value-of-keeping-the-right-customers" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-slate-900 underline">
-                  Harvard Business Review
-                </a>
-              </p>
-            </div>
-
-            <div className="bg-white rounded-xl p-8 border border-slate-200">
-              <div className="mb-6">
-                <div className="text-5xl font-bold text-slate-900 mb-3">25%</div>
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  profit increase from a 5% increase in customer retention
-                </p>
-              </div>
-              <p className="text-xs text-slate-500">
-                <a href="https://media.bain.com/Images/BB_Prescription_cutting_costs.pdf" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-slate-900 underline">
-                  Bain & Company
-                </a>
-              </p>
-            </div>
+          <div className="text-center">
+            <blockquote className="text-xl md:text-1xl font-semibold text-slate-900">
+              "39% of customers abandon paper loyalty programs because they misplace their cards"
+            </blockquote>
+            <p className="text-xs text-slate-500 mt-4">
+              <a href="https://www.stampme.com/blog/digital-vs-paper-punch-cards" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-slate-900 underline">
+                StampMe
+              </a>
+            </p>
           </div>
         </div>
       </section>
@@ -256,7 +182,7 @@ export default function Home() {
             <div>
               <h3 className="font-semibold text-slate-900 text-sm mb-3">Product</h3>
               <ul className="space-y-2">
-                <li><Link href="/dashboard/upgrade" className="text-sm text-slate-600 hover:text-slate-900">Pricing</Link></li>
+                <li><Link href="/pricing" className="text-sm text-slate-600 hover:text-slate-900">Pricing</Link></li>
                 <li><Link href="/signup" className="text-sm text-slate-600 hover:text-slate-900">Get Started</Link></li>
               </ul>
             </div>

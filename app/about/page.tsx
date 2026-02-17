@@ -82,21 +82,20 @@ export default function About() {
           <div className="space-y-6 text-slate-600 leading-relaxed">
             <p>
               StarQR was born in Chattanooga, Tennessee from a simple observation: paper punch cards 
-              were everywhere in local coffee shops, salons, and restaurants — and everywhere they were 
+              were everywhere in local coffee, ice cream, and bagel shops — and everywhere they were 
               getting lost, damaged, or forgotten at home.
             </p>
 
             <p>
               Business owners shared the same frustration. They couldn't track their loyal customers, 
-              couldn't send reminders, and had no way to measure if their loyalty programs were actually 
-              working. Existing digital solutions were either too complicated or priced for large chains 
+              Existing digital solutions were either too complicated or priced for large chains 
               with big budgets — leaving small businesses behind.
             </p>
 
             <p>
               We set out to change that. StarQR is the loyalty platform we wished existed: powerful 
               enough for any business, simple enough for anyone to use, and affordable enough for a 
-              single-location cafe or salon.
+              single-location cafe.
             </p>
 
             <p>

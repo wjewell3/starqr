@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function Upgrade() {
+export default function Pricing() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const canceled = searchParams.get('canceled') === 'true';
@@ -37,11 +37,11 @@ export default function Upgrade() {
       <nav className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-between h-14">
-            <Link href="/dashboard" className="font-medium text-slate-900">
+            <Link href="/" className="font-medium text-slate-900">
               StarQR
             </Link>
-            <Link href="/dashboard" className="text-sm text-slate-600 hover:text-slate-900">
-              ← Back to dashboard
+            <Link href="/" className="text-sm text-slate-600 hover:text-slate-900">
+              ← Back to home
             </Link>
           </div>
         </div>
@@ -99,9 +99,9 @@ export default function Upgrade() {
           </div>
 
           {/* Pro Tier */}
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 backdrop-blur-sm rounded-xl p-8 border-2 border-amber-500 relative">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-medium px-3 py-1 rounded-full">
-              Recommended
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border-2 border-slate-900 relative">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-medium px-3 py-1 rounded-full">
+              Most Popular
             </div>
 
             <div className="mb-6">
@@ -134,7 +134,7 @@ export default function Upgrade() {
             <button
               onClick={handleUpgrade}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-2.5 rounded-lg hover:from-amber-600 hover:to-orange-600 disabled:opacity-60 transition-colors font-medium text-sm"
+              className="w-full bg-slate-900 text-white py-2.5 rounded-lg hover:bg-slate-800 disabled:opacity-60 transition-colors font-medium text-sm"
             >
               {loading ? 'Redirecting...' : 'Upgrade to Pro'}
             </button>
@@ -145,11 +145,10 @@ export default function Upgrade() {
           </div>
         </div>
 
-        {/* FAQ Link */}
         <div className="mt-16 text-center">
           <p className="text-sm text-slate-600 mb-4">Have questions?</p>
-          <Link 
-            href="/faq" 
+          <Link
+            href="/faq"
             className="text-sm text-slate-900 hover:underline font-medium"
           >
             View Frequently Asked Questions →

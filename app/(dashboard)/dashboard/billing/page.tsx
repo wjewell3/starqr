@@ -241,9 +241,12 @@ export default function BillingPage() {
                     Recommended
                   </Badge>
                 </div>
-                <p className="text-3xl font-bold text-gray-900 mb-1">
-                  $9<span className="text-lg text-gray-600">/month</span>
-                </p>
+                <div className="flex items-baseline gap-2 mb-1">
+                  <p className="text-3xl font-bold text-gray-900">$9</p>
+                  <span className="text-sm line-through text-gray-500">$12</span>
+                  <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">Save 25%</span>
+                </div>
+                <p className="text-sm text-gray-600">/month</p>
                 <p className="text-sm text-gray-600 mb-6">Billed monthly</p>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2 text-sm">
