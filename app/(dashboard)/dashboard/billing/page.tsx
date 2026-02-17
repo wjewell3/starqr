@@ -12,6 +12,7 @@ export default function BillingPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   
   const [planTier, setPlanTier] = useState<'free' | 'paid'>('free');
   const [subscriptionStatus, setSubscriptionStatus] = useState('');
@@ -73,6 +74,29 @@ export default function BillingPage() {
       console.error('Portal error:', error);
       alert('Failed to open billing portal');
       setPortalLoading(false);
+    }
+  };
+
+  const handleUpgrade = async () => {
+    setCheckoutLoading(true);
+
+    try {
+      const response = await fetch('/api/stripe/create-checkout', {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Failed to start checkout');
+        setCheckoutLoading(false);
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Failed to start checkout');
+      setCheckoutLoading(false);
     }
   };
 
@@ -170,11 +194,11 @@ export default function BillingPage() {
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
               {planTier === 'free' ? (
-                <Link href="/dashboard/upgrade" className="flex-1">
-                  <Button className="w-full" size="lg">
-                    Upgrade to Pro
+                <div className="flex-1">
+                  <Button onClick={handleUpgrade} className="w-full" size="lg" disabled={checkoutLoading}>
+                    {checkoutLoading ? 'Redirecting...' : 'Upgrade to Pro'}
                   </Button>
-                </Link>
+                </div>
               ) : (
                 <Button
                   onClick={handleOpenPortal}
@@ -262,11 +286,11 @@ export default function BillingPage() {
                     <span>Email support</span>
                   </li>
                 </ul>
-                <Link href="/dashboard/upgrade" className="mt-6 block">
-                  <Button className="w-full" size="lg">
-                    Upgrade Now
+                <div className="mt-6 block">
+                  <Button className="w-full" size="lg" onClick={handleUpgrade} disabled={checkoutLoading}>
+                    {checkoutLoading ? 'Redirecting...' : 'Upgrade Now'}
                   </Button>
-                </Link>
+                </div>
               </div>
             </div>
           </CardContent>

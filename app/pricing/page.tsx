@@ -1,16 +1,29 @@
-'use client';
+"use client";
 
 import { useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
 
 function PricingContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const canceled = searchParams.get('canceled') === 'true';
 
   const handleUpgrade = async () => {
     setLoading(true);
+
+    // Ensure user is logged in before creating a checkout session.
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      // Prompt sign up / login flow; preserve intent to upgrade
+      router.push('/signup?next=/pricing&intent=upgrade');
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch('/api/stripe/create-checkout', {
@@ -99,19 +112,19 @@ function PricingContent() {
           </div>
 
           {/* Pro Tier */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border-2 border-slate-900 relative">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-medium px-3 py-1 rounded-full">
-              Most Popular
+          <div className="border-2 border-amber-500 rounded-xl p-8 bg-gradient-to-br from-amber-50 to-orange-50 relative">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-medium px-3 py-1 rounded-full">
+              Recommended
             </div>
 
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">Pro</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Pro</h2>
               <div className="flex items-baseline gap-2">
-                <div className="text-4xl font-bold text-slate-900">$9</div>
-                <span className="text-sm line-through text-slate-500">$12</span>
+                <div className="text-4xl font-bold text-gray-900">$9</div>
+                <span className="text-sm line-through text-gray-500">$12</span>
                 <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">Save 25%</span>
               </div>
-              <p className="text-slate-600 mt-2">/month</p>
+              <p className="text-gray-600 mt-2">/month</p>
             </div>
 
             <div className="space-y-3 mb-8">
@@ -121,12 +134,12 @@ function PricingContent() {
                 'Email support',
               ].map((feature) => (
                 <div key={feature} className="flex items-start gap-3">
-                  <div className="w-5 h-5 bg-slate-900 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-5 h-5 bg-amber-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <span className="text-sm text-slate-700">{feature}</span>
+                  <span className="text-sm text-gray-700">{feature}</span>
                 </div>
               ))}
             </div>
@@ -134,12 +147,12 @@ function PricingContent() {
             <button
               onClick={handleUpgrade}
               disabled={loading}
-              className="w-full bg-slate-900 text-white py-2.5 rounded-lg hover:bg-slate-800 disabled:opacity-60 transition-colors font-medium text-sm"
+              className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-2.5 rounded-lg hover:opacity-95 disabled:opacity-60 transition-colors font-medium text-sm"
             >
               {loading ? 'Redirecting...' : 'Upgrade to Pro'}
             </button>
 
-            <p className="text-xs text-slate-500 text-center mt-4">
+            <p className="text-xs text-gray-500 text-center mt-4">
               Cancel anytime · No contracts
             </p>
           </div>
