@@ -47,9 +47,10 @@ export async function POST() {
     if (activeSub && (activeSub.id || (activeSub as any).id)) {
       const sid = typeof activeSub === 'string' ? activeSub : (activeSub as any).id;
       updatePayload.stripe_subscription_id = sid;
-      updatePayload.subscription_status = activeSub.status ?? 'active';
-      updatePayload.subscription_current_period_end = activeSub.current_period_end
-        ? new Date(activeSub.current_period_end * 1000).toISOString()
+      updatePayload.subscription_status = (activeSub as any).status ?? 'active';
+      const rawPeriodEnd = (activeSub as any).current_period_end ?? (activeSub as any).items?.data?.[0]?.current_period_end;
+      updatePayload.subscription_current_period_end = rawPeriodEnd
+        ? new Date(rawPeriodEnd * 1000).toISOString()
         : null;
       updatePayload.plan_tier = 'paid';
     }
