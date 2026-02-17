@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { generateUniqueSlug } from '@/lib/slug';
 
@@ -13,6 +14,7 @@ interface Stats {
 }
 
 export default function Dashboard() {
+  const searchParams = useSearchParams();
   const [stats, setStats] = useState<Stats | null>(null);
   const [merchantId, setMerchantId] = useState('');
   const [businessName, setBusinessName] = useState('');
@@ -63,7 +65,23 @@ export default function Dashboard() {
       }
     }
 
-    loadDashboardData();
+    // If returning from checkout, confirm the session with the server and then reload stats
+    const checkAndLoad = async () => {
+      const sessionId = searchParams.get('session_id');
+      const upgrade = searchParams.get('upgrade');
+
+      if (upgrade === 'success' && sessionId) {
+        try {
+          await fetch(`/api/stripe/confirm?session_id=${encodeURIComponent(sessionId)}`);
+        } catch (err) {
+          console.warn('Confirm checkout failed:', err);
+        }
+      }
+
+      await loadDashboardData();
+    };
+
+    checkAndLoad();
   }, []);
 
   if (loading || !stats) {

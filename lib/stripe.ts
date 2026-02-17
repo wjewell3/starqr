@@ -20,7 +20,8 @@ export async function createCheckoutSession(
         quantity: 1,
       },
     ],
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?upgrade=success`,
+    // Include the checkout session id so the app can confirm and apply changes immediately
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?upgrade=success&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/upgrade?canceled=true`,
     metadata: {
       merchant_id: merchantId,
