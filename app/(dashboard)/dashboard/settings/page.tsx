@@ -127,14 +127,16 @@ export default function Settings() {
         return;
       }
 
-      // Delete auth user (requires service role key on server)
-      // Since we can't use admin.deleteUser from client, we'll call an API route
-      const deleteUserResponse = await fetch('/api/user/delete', {
+      // Call server-side account delete which cancels Stripe and removes DB + auth
+      const deleteUserResponse = await fetch('/api/account/delete', {
         method: 'DELETE',
       });
 
       if (!deleteUserResponse.ok) {
-        console.error('User delete failed');
+        console.error('Account delete failed');
+        alert('Failed to delete account. Please contact support.');
+        setDeleting(false);
+        return;
       }
 
       // Sign out
