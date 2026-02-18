@@ -85,12 +85,11 @@ export default function About() {
           <div className="space-y-6 text-slate-600 leading-relaxed">
             <p>
               StarQR was born in Chattanooga, Tennessee from a simple observation: paper punch cards 
-              were everywhere in local coffee, ice cream, and bagel shops — and everywhere they were 
-              getting lost, damaged, or forgotten at home.
+              from local coffee, ice cream, and bagel shops were getting lost, damaged, or forgotten at home.
             </p>
 
             <p>
-              Business owners shared the same frustration. They couldn't track their loyal customers, 
+              Business owners shared the same frustration. They couldn't track their loyal customers. 
               Existing digital solutions were either too complicated or priced for large chains 
               with big budgets — leaving small businesses behind.
             </p>
