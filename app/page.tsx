@@ -49,8 +49,8 @@ export default function Home() {
             </div>
             
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-slate-900 mb-6">
-              {/* Digital Loyalty Cards<br />That Customers Love */}
-              QR-based Loyalty
+              Digital Punch Cards
+              {/* QR-based Loyalty */}
             </h1>
             
             <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -76,6 +76,17 @@ export default function Home() {
             <p className="text-sm text-slate-500 mt-6">
               Free for 25 customers · No credit card required
             </p>
+
+            <div className="mt-10 flex justify-center">
+              <div className="w-full max-w-md">
+                <img
+                  src="/images/IMG_3201.jpg"
+                  alt="Phone showing StarQR digital punch card with welcome message"
+                  className="rounded-xl shadow-lg w-full h-auto"
+                />
+                <p className="text-xs text-center text-slate-500 mt-2">Scan the QR, enter your number — earn stars instantly.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -175,7 +186,7 @@ export default function Home() {
             <div>
               <div className="text-xl font-semibold text-slate-900 mb-4">StarQR</div>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Modern loyalty cards for local businesses. Build lasting customer relationships.
+                Modern loyalty cards for local businesses.
               </p>
             </div>
             

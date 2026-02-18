@@ -234,7 +234,7 @@ export default function CheckIn() {
         ) : (
           <>
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-semibold mb-1.5 text-slate-900">Check in</h1>
+              <h1 className="text-2xl font-semibold mb-1.5 text-slate-900">Check in at {businessName || 'this business'}</h1>
               <p className="text-sm text-slate-600">Enter your number to earn a stamp</p>
             </div>
 
