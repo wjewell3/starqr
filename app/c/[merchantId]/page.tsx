@@ -8,12 +8,15 @@ interface CheckInData {
   stamps_needed: number;
   redeemed: boolean;
   reward_text: string;
+  business_name: string;
+  isFirstSignup: boolean;
 }
 
 export default function CheckIn() {
   const params = useParams();
   const slug = params.merchantId as string;
   const [merchantId, setMerchantId] = useState('');
+  const [businessName, setBusinessName] = useState('');
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -33,6 +36,7 @@ export default function CheckIn() {
         }
 
         setMerchantId(result.id);
+        setBusinessName(result.business_name);
       } catch (err) {
         console.error('Lookup failed:', err);
         setLookupError('Failed to load business info');
@@ -97,14 +101,40 @@ export default function CheckIn() {
   if (data) {
     const progress = (data.stamps_current / data.stamps_needed) * 100;
     
+    // Show welcome screen for first signup
+    if (data.isFirstSignup && !data.redeemed) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-6">
+          <div className="w-full max-w-md">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200 text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-semibold mb-2 text-slate-900">Welcome to {data.business_name}!</h2>
+              <p className="text-slate-600 mb-6">
+                Thanks for signing up. You've earned 2 bonus stars to get you started.
+              </p>
+              <button
+                onClick={() => setData(null)}
+                className="w-full bg-slate-900 text-white py-2.5 text-sm rounded-md hover:bg-slate-800 transition-colors font-medium"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
           {data.redeemed ? (
             <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200 text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
               </div>
               <h2 className="text-2xl font-semibold mb-2 text-slate-900">Reward earned</h2>
@@ -117,9 +147,10 @@ export default function CheckIn() {
             </div>
           ) : (
             <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
+              <h3 className="text-xl font-semibold mb-6 text-slate-900 text-center">{data.business_name}</h3>
               <div className="mb-6">
                 <div className="flex justify-between text-xs mb-2.5 text-slate-600">
-                  <span className="font-medium">{data.stamps_current} stamps</span>
+                  <span className="font-medium">{data.stamps_current} stars</span>
                   <span>{data.stamps_needed - data.stamps_current} remaining</span>
                 </div>
                 <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
@@ -141,8 +172,8 @@ export default function CheckIn() {
                     }`}
                   >
                     {i < data.stamps_current && (
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                       </svg>
                     )}
                   </div>

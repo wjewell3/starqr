@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     // 1. Get merchant details
     const { data: merchant, error: merchantError } = await supabase
       .from('merchants')
-      .select('id, stamps_needed, reward_text, plan_tier, subscription_status')
+      .select('id, business_name, stamps_needed, reward_text, plan_tier, subscription_status')
       .eq('id', merchantId)
       .single();
 
@@ -114,8 +114,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 7. Create check-in and update stamps
-    const newStamps = customer.stamps_current + 1;
+    // 7. Detect first signup and award bonus stamps
+    const isFirstSignup = customer.stamps_lifetime === 0;
+    const bonusStamps = isFirstSignup ? 2 : 0;
+    const totalStampsAdded = 1 + bonusStamps;
+    
+    // Create check-in and update stamps
+    const newStamps = customer.stamps_current + totalStampsAdded;
     const redeemed = newStamps >= merchant.stamps_needed;
 
     const { error: checkInError } = await supabase
@@ -123,7 +128,7 @@ export async function POST(req: NextRequest) {
       .insert({
         merchant_id: merchantId,
         customer_id: customer.id,
-        stamps_added: 1,
+        stamps_added: totalStampsAdded,
       });
 
     if (checkInError) throw checkInError;
@@ -134,7 +139,7 @@ export async function POST(req: NextRequest) {
       .from('customers')
       .update({
         stamps_current: stampsAfterRedemption,
-        stamps_lifetime: customer.stamps_lifetime + 1,
+        stamps_lifetime: customer.stamps_lifetime + totalStampsAdded,
         visits_total: customer.visits_total + 1,
         last_visit_at: new Date().toISOString(),
       })
@@ -162,8 +167,10 @@ export async function POST(req: NextRequest) {
       stamps_needed: merchant.stamps_needed,
       redeemed,
       reward_text: merchant.reward_text,
+      business_name: merchant.business_name,
       token: cacheToken,
       customer_id: customer.id,
+      isFirstSignup,
     });
 
   } catch (error) {

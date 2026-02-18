@@ -14,8 +14,11 @@ export default function About() {
               <Link href="/about" className="text-sm text-slate-900 font-medium">
                 About
               </Link>
-              <Link href="/dashboard/upgrade" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
+              <Link href="/pricing" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
                 Pricing
+              </Link>
+              <Link href="/faq" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
+                FAQ
               </Link>
             </div>
 
@@ -201,14 +204,14 @@ export default function About() {
             <div>
               <div className="text-xl font-semibold text-slate-900 mb-4">StarQR</div>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Modern loyalty cards for local businesses. Build lasting customer relationships.
+                Modern loyalty cards for local businesses.
               </p>
             </div>
             
             <div>
               <h3 className="font-semibold text-slate-900 text-sm mb-3">Product</h3>
               <ul className="space-y-2">
-                <li><Link href="/dashboard/upgrade" className="text-sm text-slate-600 hover:text-slate-900">Pricing</Link></li>
+                <li><Link href="/pricing" className="text-sm text-slate-600 hover:text-slate-900">Pricing</Link></li>
                 <li><Link href="/signup" className="text-sm text-slate-600 hover:text-slate-900">Get Started</Link></li>
               </ul>
             </div>
@@ -217,6 +220,7 @@ export default function About() {
               <h3 className="font-semibold text-slate-900 text-sm mb-3">Company</h3>
               <ul className="space-y-2">
                 <li><Link href="/about" className="text-sm text-slate-600 hover:text-slate-900">About</Link></li>
+                <li><Link href="/faq" className="text-sm text-slate-600 hover:text-slate-900">FAQ</Link></li>
               </ul>
             </div>
             
