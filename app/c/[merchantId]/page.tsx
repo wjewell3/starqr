@@ -242,7 +242,7 @@ export default function CheckIn() {
               <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="tel"
-              placeholder="(555) 123-4567"
+              placeholder="(423) 123-4567"
               value={phone}
               onChange={(e) => setPhone(formatPhone(e.target.value))}
               className="w-full px-4 py-3 text-sm text-center border border-slate-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-shadow"

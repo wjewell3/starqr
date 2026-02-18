@@ -88,7 +88,7 @@ export function CheckInForm({ merchantId, onSuccess }: CheckInFormProps) {
         <Input
           id="phone"
           type="tel"
-          placeholder="(555) 123-4567"
+          placeholder="(423) 123-4567"
           value={phone}
           onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
           className="text-lg text-center"

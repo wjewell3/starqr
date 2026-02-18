@@ -18,7 +18,7 @@ A visual guide to everything that's been implemented.
 **User Flow:**
 1. Customer scans QR code with phone camera
 2. Opens check-in page automatically
-3. Enters phone number (auto-formatted: `(555) 123-4567`)
+3. Enters phone number (auto-formatted: `(423) 123-4567`)
 4. Taps "Get Stamp" button
 5. Sees animated stamp card fill up
 6. Gets celebration screen when reward unlocked
