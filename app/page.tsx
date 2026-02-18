@@ -77,14 +77,25 @@ export default function Home() {
               Free for 25 customers · No credit card required
             </p>
 
-            <div className="mt-10 flex justify-center">
-              <div className="w-full max-w-md">
-                <img
-                  src="/images/IMG_3201.jpg"
-                  alt="Phone showing StarQR digital punch card with welcome message"
-                  className="rounded-xl shadow-lg w-full h-auto"
-                />
-                <p className="text-xs text-center text-slate-500 mt-2">Scan the QR, enter your number — earn stars instantly.</p>
+            <div className="mt-12 flex flex-col gap-8 justify-center">
+              <div className="flex justify-center">
+                <div className="w-full max-w-md">
+                  <img
+                    src="/images/person-scanning-qr-code-cafeteria.jpg"
+                    alt="Person scanning QR code at cafeteria"
+                    className="rounded-xl shadow-lg w-full h-auto"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <div className="w-full max-w-md">
+                  <img
+                    src="/images/welcome.jpg"
+                    alt="Phone showing StarQR digital punch card with welcome message"
+                    className="rounded-xl shadow-lg w-full h-auto"
+                  />
+                  <p className="text-xs text-center text-slate-500 mt-2">Scan the QR, enter your number — earn stars instantly.</p>
+                </div>
               </div>
             </div>
           </div>
