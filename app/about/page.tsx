@@ -85,7 +85,7 @@ export default function About() {
           <div className="space-y-6 text-slate-600 leading-relaxed">
             <p>
               StarQR was born in Chattanooga, Tennessee from a simple observation: paper punch cards 
-              from local coffee, ice cream, and bagel shops were getting lost, damaged, or forgotten at home.
+              from coffee, ice cream, and bagel shops were getting lost, damaged, or forgotten at home.
             </p>
 
             <p>
