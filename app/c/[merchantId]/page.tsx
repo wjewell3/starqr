@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 
 interface CheckInData {
   stamps_current: number;
@@ -22,6 +23,7 @@ export default function CheckIn() {
   const [error, setError] = useState('');
   const [data, setData] = useState<CheckInData | null>(null);
   const [lookupError, setLookupError] = useState('');
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
   // Lookup merchant ID from slug on mount
   useEffect(() => {
@@ -43,7 +45,21 @@ export default function CheckIn() {
       }
     };
 
+    // Also fetch current auth session if available
+    const getAuthSession = async () => {
+      try {
+        const supabase = createClient();
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (!error && session?.access_token) {
+          setAuthToken(session.access_token);
+        }
+      } catch (e) {
+        console.warn('Failed to fetch auth session:', e);
+      }
+    };
+
     lookupMerchant();
+    getAuthSession();
   }, [slug]);
 
   const formatPhone = (value: string) => {
@@ -75,7 +91,7 @@ export default function CheckIn() {
       const res = await fetch('/api/checkin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ merchantId, phone: cleaned }),
+        body: JSON.stringify({ merchantId, phone: cleaned, token: authToken }),
       });
 
       const result = await res.json();

@@ -45,10 +45,13 @@ export function CheckInForm({ merchantId, onSuccess }: CheckInFormProps) {
     }
 
     try {
+      // Include any cached token for this merchant (from previous client-side link)
+      const cachedToken = localStorage.getItem(`starqr_token_${merchantId}`);
+
       const res = await fetch('/api/checkin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ merchantId, phone: cleaned }),
+        body: JSON.stringify({ merchantId, phone: cleaned, token: cachedToken }),
       });
 
       const data = await res.json();

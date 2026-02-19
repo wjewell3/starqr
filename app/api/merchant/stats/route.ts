@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     // Get top customers (by visit count)
     const { data: topCustomers } = await supabase
       .from('customers')
-      .select('phone_last_4, visits_total, stamps_current')
+      .select('phone_last_4, visits_total, stamps_current, user_id, apple_pass_provisioned_at, google_pass_provisioned_at, pass_revoked_at')
       .eq('merchant_id', merchant.id)
       .order('visits_total', { ascending: false })
       .limit(5);

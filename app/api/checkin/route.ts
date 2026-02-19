@@ -38,23 +38,55 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 3. Hash phone number
-    const phoneHash = hashPhone(phone, merchantId);
-    const phoneLast4 = getPhoneLast4(phone);
+    // 3. Hash phone number (if provided)
+    const phoneHash = phone ? hashPhone(phone, merchantId) : null;
+    const phoneLast4 = phone ? getPhoneLast4(phone) : null;
 
-    // 4. Get or create customer
-    let { data: customer, error: customerError } = await supabase
-      .from('customers')
-      .select('*')
-      .eq('merchant_id', merchantId)
-      .eq('phone_hash', phoneHash)
-      .single();
+    // 4. If a Supabase auth token was provided, prefer the authenticated user mapping
+    let userId: string | null = null;
+    if (token) {
+      try {
+        const { data: userData, error: userErr } = await supabase.auth.getUser(token as string);
+        if (!userErr && userData && (userData as any).user) {
+          userId = (userData as any).user.id;
+        }
+      } catch (e) {
+        console.warn('Failed to resolve user from token:', e);
+      }
+    }
 
-    if (customerError && customerError.code !== 'PGRST116') {
+    // 5. Get or create customer. If userId is present, try to find by user_id first.
+    let customer: any = null;
+    let customerError: any = null;
+
+    if (userId) {
+      const res = await supabase
+        .from('customers')
+        .select('*')
+        .eq('merchant_id', merchantId)
+        .eq('user_id', userId)
+        .single();
+      customer = res.data;
+      customerError = res.error;
+    }
+
+    // If customer not found via user_id, fall back to phone hash lookup (if phone provided)
+    if (!customer && phoneHash) {
+      const res = await supabase
+        .from('customers')
+        .select('*')
+        .eq('merchant_id', merchantId)
+        .eq('phone_hash', phoneHash)
+        .single();
+      customer = res.data;
+      customerError = res.error;
+    }
+
+    if (customerError && (customerError as any).code !== 'PGRST116') {
       throw customerError;
     }
 
-    // 5. Check free tier customer limit BEFORE creating new customer
+    // 6. Check free tier customer limit BEFORE creating new customer
     if (!customer && merchant.plan_tier === 'free') {
       const { count } = await supabase
         .from('customers')
@@ -74,17 +106,26 @@ export async function POST(req: NextRequest) {
     }
 
     if (!customer) {
-      // Create new customer
+      // If user is present but phone wasn't provided, we cannot create a customer due to existing NOT NULL phone_hash constraint.
+      if (userId && !phoneHash) {
+        return NextResponse.json({ error: 'Authenticated user has no linked phone. Please provide a phone number to link your wallet.' }, { status: 400 });
+      }
+
+      // Create new customer (includes user_id when available)
+      const insertPayload: any = {
+        merchant_id: merchantId,
+        phone_hash: phoneHash,
+        phone_last_4: phoneLast4,
+        stamps_current: 0,
+        stamps_lifetime: 0,
+        visits_total: 0,
+      };
+
+      if (userId) insertPayload.user_id = userId;
+
       const { data: newCustomer, error: createError } = await supabase
         .from('customers')
-        .insert({
-          merchant_id: merchantId,
-          phone_hash: phoneHash,
-          phone_last_4: phoneLast4,
-          stamps_current: 0,
-          stamps_lifetime: 0,
-          visits_total: 0,
-        })
+        .insert(insertPayload)
         .select()
         .single();
 
