@@ -38,8 +38,15 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_customers_merchant_user ON public.customer
 DO $$
 BEGIN
   IF (SELECT to_regclass('auth.users')) IS NOT NULL THEN
-    ALTER TABLE IF EXISTS public.customers
-      ADD CONSTRAINT IF NOT EXISTS customers_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE SET NULL;
+    -- Check if constraint exists before adding
+    IF NOT EXISTS (
+      SELECT 1 FROM information_schema.table_constraints 
+      WHERE constraint_name = 'customers_user_id_fkey'
+      AND table_name = 'customers'
+    ) THEN
+      ALTER TABLE public.customers
+        ADD CONSTRAINT customers_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE SET NULL;
+    END IF;
   END IF;
 END$$;
 
