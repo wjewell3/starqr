@@ -323,7 +323,7 @@ export default function Settings() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-xl sm:text-2xl font-bold mb-1 text-slate-900">Settings</h1>
+        <h1 className="text-lg sm:text-2xl font-bold mb-1 text-slate-900">Settings</h1>
         <p className="text-slate-600 text-sm">Manage your loyalty program</p>
       </div>
 
