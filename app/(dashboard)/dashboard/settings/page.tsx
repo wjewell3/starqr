@@ -447,12 +447,12 @@ export default function Settings() {
 
             <div>
               <label className="block text-xs font-medium mb-2 text-slate-700">Stamp Background Color</label>
-              <div className="flex gap-3 items-center">
+              <div className="flex gap-2 md:gap-3 items-center flex-wrap">
                 <input
                   type="color"
                   value={walletConfig.stamp_bg_color || '#1E40AF'}
                   onChange={(e) => setWalletConfig({ ...walletConfig, stamp_bg_color: e.target.value })}
-                  className="w-12 h-10 rounded cursor-pointer border border-slate-300"
+                  className="w-10 md:w-12 h-10 rounded cursor-pointer border border-slate-300"
                 />
                 <code className="text-xs bg-slate-50 px-2 py-1 rounded border border-slate-200">
                   {walletConfig.stamp_bg_color || '#1E40AF'}
@@ -462,12 +462,12 @@ export default function Settings() {
 
             <div>
               <label className="block text-xs font-medium mb-2 text-slate-700">Stamp Text Color</label>
-              <div className="flex gap-3 items-center">
+              <div className="flex gap-2 md:gap-3 items-center flex-wrap">
                 <input
                   type="color"
                   value={walletConfig.stamp_text_color || '#FFFFFF'}
                   onChange={(e) => setWalletConfig({ ...walletConfig, stamp_text_color: e.target.value })}
-                  className="w-12 h-10 rounded cursor-pointer border border-slate-300"
+                  className="w-10 md:w-12 h-10 rounded cursor-pointer border border-slate-300"
                 />
                 <code className="text-xs bg-slate-50 px-2 py-1 rounded border border-slate-200">
                   {walletConfig.stamp_text_color || '#FFFFFF'}
@@ -478,7 +478,7 @@ export default function Settings() {
             <div className="border-t border-slate-200 pt-6">
               <h3 className="text-xs font-medium mb-4 text-slate-700">Preview</h3>
               <div 
-                className="bg-slate-50 rounded-lg p-4 border border-slate-200 bg-cover bg-center bg-no-repeat relative overflow-hidden min-h-72"
+                className="bg-slate-50 rounded-lg p-3 md:p-4 border border-slate-200 bg-cover bg-center bg-no-repeat relative overflow-hidden min-h-64 md:min-h-72"
                 style={{
                   backgroundImage: walletConfig.logo_url ? `url('${walletConfig.logo_url}')` : 'none',
                   backgroundColor: walletConfig.logo_url ? 'rgba(0, 0, 0, 0.4)' : '#f1f5f9'
@@ -504,18 +504,18 @@ export default function Settings() {
                       }}
                     />
                   </div>
-                  <div className="grid grid-cols-5 gap-2">
+                  <div className="grid grid-cols-4 sm:grid-cols-5 gap-1 sm:gap-2">
                     {Array.from({ length: stampsNeeded }).map((_, i) => (
                       <div
                         key={i}
                         className="flex items-center justify-center"
                       >
                         {i < 3 ? (
-                          <svg className="w-14 h-14" fill="white" viewBox="0 0 24 24">
+                          <svg className="w-10 sm:w-14 h-10 sm:h-14" fill="white" viewBox="0 0 24 24">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                           </svg>
                         ) : (
-                          <svg className="w-14 h-14" fill="rgba(255, 255, 255, 0.3)" viewBox="0 0 24 24">
+                          <svg className="w-10 sm:w-14 h-10 sm:h-14" fill="rgba(255, 255, 255, 0.3)" viewBox="0 0 24 24">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                           </svg>
                         )}
@@ -542,8 +542,8 @@ export default function Settings() {
           
           {qr && (
             <div className="space-y-4">
-              <div className="bg-white p-6 rounded-lg border border-slate-200 flex justify-center">
-                <img src={qr} alt="QR Code" className="w-64 h-64" />
+              <div className="bg-white p-3 md:p-6 rounded-lg border border-slate-200 flex justify-center overflow-x-auto">
+                <img src={qr} alt="QR Code" className="w-48 md:w-64 h-48 md:h-64" />
               </div>
 
               <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
@@ -572,8 +572,8 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="bg-red-50 rounded-xl p-6 border-2 border-red-200">
-        <h2 className="font-semibold text-lg mb-2 text-red-900">Delete Account</h2>
+      <div className="bg-red-50 rounded-xl p-3 md:p-6 border-2 border-red-200">
+        <h2 className="font-semibold text-base md:text-lg mb-2 text-red-900">Delete Account</h2>
         <p className="text-sm text-red-700 mb-4">
           Permanently delete your account and all customer data. This cannot be undone.
         </p>
