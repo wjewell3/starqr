@@ -94,8 +94,8 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="mb-12">
-        <h1 className="text-2xl font-bold mb-1 text-slate-900">Overview</h1>
+      <div className="mb-8 md:mb-12">
+        <h1 className="text-lg md:text-2xl font-bold mb-1 text-slate-900">Overview</h1>
         <p className="text-slate-600 text-sm">Your loyalty program at a glance</p>
       </div>
 
@@ -123,25 +123,25 @@ export default function Dashboard() {
         </div>
       ) : null}
 
-      <div className="grid md:grid-cols-3 gap-6 mb-12">
-        <div className="bg-slate-50 rounded-lg p-6">
-          <div className="text-sm text-slate-600 mb-2">Customers</div>
-          <div className="text-3xl font-bold mb-1 text-slate-900">{stats.totalCustomers}</div>
-          <div className="text-sm text-slate-500">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+        <div className="bg-slate-50 rounded-lg p-4 md:p-6">
+          <div className="text-xs md:text-sm text-slate-600 mb-2">Customers</div>
+          <div className="text-2xl md:text-3xl font-bold mb-1 text-slate-900">{stats.totalCustomers}</div>
+          <div className="text-xs md:text-sm text-slate-500">
             {stats.planTier === 'free' ? `${slotsLeft} slots left` : 'Unlimited'}
           </div>
         </div>
 
-        <div className="bg-slate-50 rounded-lg p-6">
-          <div className="text-sm text-slate-600 mb-2">Check-ins</div>
-          <div className="text-3xl font-bold mb-1 text-slate-900">{stats.checkInsThisMonth}</div>
-          <div className="text-sm text-slate-500">This month</div>
+        <div className="bg-slate-50 rounded-lg p-4 md:p-6">
+          <div className="text-xs md:text-sm text-slate-600 mb-2">Check-ins</div>
+          <div className="text-2xl md:text-3xl font-bold mb-1 text-slate-900">{stats.checkInsThisMonth}</div>
+          <div className="text-xs md:text-sm text-slate-500">This month</div>
         </div>
 
-        <div className="bg-slate-50 rounded-lg p-6">
-          <div className="text-sm text-slate-600 mb-2">Rewards</div>
-          <div className="text-3xl font-bold mb-1 text-slate-900">{stats.rewardsThisMonth}</div>
-          <div className="text-sm text-slate-500">Redeemed</div>
+        <div className="bg-slate-50 rounded-lg p-4 md:p-6">
+          <div className="text-xs md:text-sm text-slate-600 mb-2">Rewards</div>
+          <div className="text-2xl md:text-3xl font-bold mb-1 text-slate-900">{stats.rewardsThisMonth}</div>
+          <div className="text-xs md:text-sm text-slate-500">Redeemed</div>
         </div>
       </div>
 
