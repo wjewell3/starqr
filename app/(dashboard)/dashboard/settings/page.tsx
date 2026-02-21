@@ -170,15 +170,38 @@ export default function Settings() {
     setUploading(true);
     setMessage(null);
 
-    // Read file as data URL
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const dataUrl = event.target?.result as string;
-
-      // Validate file size (max 500KB for data URLs)
-      if (dataUrl.length > 500000) {
+    // Compress image before converting to data URL
+    const img = new Image();
+    img.onload = async () => {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+      
+      // Resize if image is too large (max 400px)
+      if (width > 400 || height > 400) {
+        const scale = Math.min(400 / width, 400 / height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
         setUploading(false);
-        setMessage({ type: 'error', text: 'Logo image is too large (max 500KB)' });
+        setMessage({ type: 'error', text: 'Failed to process image' });
+        return;
+      }
+      
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      // Convert to JPEG with compression
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+      
+      // Validate size (max 300KB for data URLs)
+      if (dataUrl.length > 300000) {
+        setUploading(false);
+        setMessage({ type: 'error', text: 'Logo image is too large after compression (max 300KB)' });
         return;
       }
 
@@ -207,6 +230,17 @@ export default function Settings() {
       }
 
       setMessage({ type: 'success', text: 'Logo uploaded successfully' });
+    };
+
+    img.onerror = () => {
+      setUploading(false);
+      setMessage({ type: 'error', text: 'Failed to load image' });
+    };
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const src = event.target?.result as string;
+      img.src = src;
     };
 
     reader.onerror = () => {
