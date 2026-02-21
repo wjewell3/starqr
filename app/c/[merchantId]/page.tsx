@@ -29,6 +29,7 @@ export default function CheckIn() {
   const [data, setData] = useState<CheckInData | null>(null);
   const [lookupError, setLookupError] = useState('');
   const [authToken, setAuthToken] = useState<string | null>(null);
+  const [walletConfig, setWalletConfig] = useState<{ logo_url?: string; stamp_bg_color?: string; stamp_text_color?: string } | null>(null);
 
   // Lookup merchant ID from slug on mount
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function CheckIn() {
 
         setMerchantId(result.id);
         setBusinessName(result.business_name);
+        setWalletConfig(result.wallet_config || {});
       } catch (err) {
         console.error('Lookup failed:', err);
         setLookupError('Failed to load business info');
@@ -285,39 +287,50 @@ export default function CheckIn() {
         ) : (
           <>
             <div className="text-center mb-8">
+              {walletConfig?.logo_url && (
+                <div className="mb-4 flex justify-center">
+                  <div className="w-16 h-16 bg-white border border-slate-200 rounded-lg p-2 flex items-center justify-center">
+                    <img 
+                      src={walletConfig.logo_url} 
+                      alt="Business logo" 
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </div>
+                </div>
+              )}
               <h1 className="text-2xl font-semibold mb-1.5 text-slate-900">Check in at {businessName || 'this business'}</h1>
               <p className="text-sm text-slate-600">Enter your number to earn a stamp</p>
             </div>
 
             <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
               <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="tel"
-              placeholder="(423) 123-4567"
-              value={phone}
-              onChange={(e) => setPhone(formatPhone(e.target.value))}
-              className="w-full px-4 py-3 text-sm text-center border border-slate-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-shadow"
-              autoFocus
-            />
+                <input
+                  type="tel"
+                  placeholder="(423) 123-4567"
+                  value={phone}
+                  onChange={(e) => setPhone(formatPhone(e.target.value))}
+                  className="w-full px-4 py-3 text-sm text-center border border-slate-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-shadow"
+                  autoFocus
+                />
 
-            {error && (
-              <div className="text-xs text-red-700 bg-red-50 px-3 py-2 rounded-md border border-red-200">
-                {error}
-              </div>
-            )}
+                {error && (
+                  <div className="text-xs text-red-700 bg-red-50 px-3 py-2 rounded-md border border-red-200">
+                    {error}
+                  </div>
+                )}
 
-            <button
-              type="submit"
-              disabled={loading || !merchantId}
-              className="w-full bg-slate-900 text-white py-2.5 text-sm rounded-md hover:bg-slate-800 disabled:opacity-60 transition-colors font-medium"
-            >
-              {loading ? 'Checking in...' : !merchantId ? 'Loading...' : 'Continue'}
-            </button>
-          </form>
+                <button
+                  type="submit"
+                  disabled={loading || !merchantId}
+                  className="w-full bg-slate-900 text-white py-2.5 text-sm rounded-md hover:bg-slate-800 disabled:opacity-60 transition-colors font-medium"
+                >
+                  {loading ? 'Checking in...' : !merchantId ? 'Loading...' : 'Continue'}
+                </button>
+              </form>
 
-          <p className="text-xs text-slate-500 text-center mt-4">
-            Number is encrypted and private
-          </p>
+              <p className="text-xs text-slate-500 text-center mt-4">
+                Number is encrypted and private
+              </p>
             </div>
           </>
         )}

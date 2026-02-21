@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     // Get merchant by looking up business name and matching slug
     const { data: merchants, error } = await supabase
       .from('merchants')
-      .select('id, business_name');
+      .select('id, business_name, wallet_config');
 
     if (error || !merchants) {
       return NextResponse.json(
@@ -39,6 +39,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       id: merchant.id,
       business_name: merchant.business_name,
+      wallet_config: merchant.wallet_config,
     });
   } catch (error) {
     console.error('Lookup error:', error);
