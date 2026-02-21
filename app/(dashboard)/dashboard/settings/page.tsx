@@ -327,8 +327,8 @@ export default function Settings() {
         <p className="text-slate-600 text-sm">Manage your loyalty program</p>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-slate-200">
+      <div className="grid lg:grid-cols-2 gap-4 lg:gap-6">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 md:p-6 lg:p-8 border border-slate-200">
           <h2 className="font-semibold text-base md:text-lg mb-6 text-slate-900">Business Information</h2>
           
           <form onSubmit={handleSave} className="space-y-6">
@@ -413,7 +413,7 @@ export default function Settings() {
           </form>
         </div>
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-slate-200">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 md:p-6 lg:p-8 border border-slate-200">
           <h2 className="font-semibold text-base md:text-lg mb-2 text-slate-900">Stamp Card Design</h2>
           <p className="text-xs text-slate-600 mb-6">Customize how your stamp card looks. Click "Save changes" at the bottom to apply.</p>
           

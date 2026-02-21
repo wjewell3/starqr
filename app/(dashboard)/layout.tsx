@@ -65,12 +65,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
       <div className="border-b border-slate-200/60 backdrop-blur-sm bg-white/80 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-12 md:h-14">
-            <div className="flex items-center gap-3 md:gap-8 min-w-0">
+          <div className="flex items-center justify-between h-auto md:h-14 py-2 md:py-0 flex-wrap md:flex-nowrap gap-2 md:gap-0">
+            <div className="flex items-center gap-2 md:gap-8 order-1 md:order-none min-w-0">
               <Link href="/dashboard" className="font-medium text-slate-900 whitespace-nowrap text-sm md:text-base">
                 StarQR
               </Link>
-              <nav className="flex gap-0.5 md:gap-6 overflow-x-auto">
+              <nav className="hidden md:flex gap-6">
                 {nav.map((item) => {
                   const isActive = item.exact 
                     ? pathname === item.href 
@@ -80,10 +80,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`text-xs md:text-sm transition-colors px-2 md:px-3 py-2 rounded-md whitespace-nowrap md:p-0 md:rounded-none ${
+                      className={`text-sm transition-colors ${
                         isActive
-                          ? 'text-slate-900 font-medium md:font-medium'
-                          : 'text-slate-600 hover:text-slate-900 md:hover:text-slate-900'
+                          ? 'text-slate-900 font-medium'
+                          : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
                       {item.label}
@@ -93,14 +93,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </nav>
             </div>
 
-            <div className="flex items-center gap-2 md:gap-4">
-              <div className="text-xs text-slate-500 hidden sm:block">
+            <div className="flex items-center gap-2 md:gap-4 flex-shrink-0 order-3 md:order-none">
+              <div className="text-xs text-slate-500 hidden md:block">
                 {businessName}
               </div>
               {planTier === 'free' && (
                 <Link
                   href="/dashboard/upgrade"
-                  className="text-xs bg-slate-900 text-white px-3 py-1.5 rounded-md hover:bg-slate-800 transition-colors"
+                  className="text-xs bg-slate-900 text-white px-2 md:px-3 py-1.5 rounded-md hover:bg-slate-800 transition-colors"
                 >
                   Upgrade
                 </Link>
@@ -112,6 +112,28 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 Sign out
               </button>
             </div>
+
+            <nav className="flex md:hidden gap-1 order-2 w-full md:w-auto">
+              {nav.map((item) => {
+                const isActive = item.exact 
+                  ? pathname === item.href 
+                  : pathname.startsWith(item.href);
+                
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`text-xs flex-1 text-center transition-colors px-2 py-2 rounded-md whitespace-nowrap overflow-hidden text-ellipsis ${
+                      isActive
+                        ? 'text-slate-900 font-medium bg-slate-100'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
         </div>
       </div>
