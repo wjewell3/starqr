@@ -168,33 +168,33 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
 
       <footer className="border-t border-slate-200 bg-white mt-16">
-        <div className="max-w-6xl mx-auto px-6 py-12">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
+        <div className="max-w-6xl mx-auto px-4 md:px-6 py-12">
+          <div className="grid grid-cols-3 md:grid-cols-4 gap-4 md:gap-8 mb-8">
+            <div className="hidden md:block">
               <div className="text-xl font-semibold text-slate-900 mb-4">StarQR</div>
               <p className="text-sm text-slate-600 leading-relaxed">
                 Modern loyalty cards for local businesses.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900 text-sm mb-3">Product</h3>
+              <h3 className="font-semibold text-slate-900 text-xs md:text-sm mb-3">Product</h3>
               <ul className="space-y-2">
-                <li><Link href="/dashboard/upgrade" className="text-sm text-slate-600 hover:text-slate-900">Pricing</Link></li>
-                <li><Link href="/signup" className="text-sm text-slate-600 hover:text-slate-900">Get Started</Link></li>
+                <li><Link href="/dashboard/upgrade" className="text-xs md:text-sm text-slate-600 hover:text-slate-900">Pricing</Link></li>
+                <li><Link href="/signup" className="text-xs md:text-sm text-slate-600 hover:text-slate-900">Get Started</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900 text-sm mb-3">Company</h3>
+              <h3 className="font-semibold text-slate-900 text-xs md:text-sm mb-3">Company</h3>
               <ul className="space-y-2">
-                <li><Link href="/about" className="text-sm text-slate-600 hover:text-slate-900">About</Link></li>
-                <li><Link href="/faq" className="text-sm text-slate-600 hover:text-slate-900">FAQ</Link></li>
+                <li><Link href="/about" className="text-xs md:text-sm text-slate-600 hover:text-slate-900">About</Link></li>
+                <li><Link href="/faq" className="text-xs md:text-sm text-slate-600 hover:text-slate-900">FAQ</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900 text-sm mb-3">Legal</h3>
+              <h3 className="font-semibold text-slate-900 text-xs md:text-sm mb-3">Legal</h3>
               <ul className="space-y-2">
-                <li><Link href="/privacy" className="text-sm text-slate-600 hover:text-slate-900">Privacy</Link></li>
-                <li><Link href="/terms" className="text-sm text-slate-600 hover:text-slate-900">Terms</Link></li>
+                <li><Link href="/privacy" className="text-xs md:text-sm text-slate-600 hover:text-slate-900">Privacy</Link></li>
+                <li><Link href="/terms" className="text-xs md:text-sm text-slate-600 hover:text-slate-900">Terms</Link></li>
               </ul>
             </div>
           </div>
