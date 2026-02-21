@@ -26,6 +26,17 @@ export async function POST(req: NextRequest) {
     // Create or get Stripe customer
     let stripeCustomerId = merchant.stripe_customer_id;
 
+    if (stripeCustomerId) {
+      try {
+        // Verify customer exists in Stripe
+        await stripe.customers.retrieve(stripeCustomerId);
+      } catch (error: any) {
+        // Customer doesn't exist (likely test mode customer with live key)
+        // Clear the invalid ID and create a new one
+        stripeCustomerId = null;
+      }
+    }
+
     if (!stripeCustomerId) {
       const customer = await stripe.customers.create({
         email: user.email,
