@@ -70,7 +70,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Link href="/dashboard" className="font-medium text-slate-900">
                 StarQR
               </Link>
-              <nav className="hidden md:flex gap-6">
+              <nav className="flex flex-col md:flex-row gap-1 md:gap-6">
                 {nav.map((item) => {
                   const isActive = item.exact 
                     ? pathname === item.href 
@@ -80,10 +80,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`text-sm transition-colors ${
+                      className={`text-sm transition-colors px-3 py-2 rounded-md md:p-0 md:rounded-none ${
                         isActive
-                          ? 'text-slate-900 font-medium'
-                          : 'text-slate-600 hover:text-slate-900'
+                          ? 'text-slate-900 font-medium md:font-medium'
+                          : 'text-slate-600 hover:text-slate-900 md:hover:text-slate-900'
                       }`}
                     >
                       {item.label}
@@ -93,7 +93,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </nav>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               <div className="text-xs text-slate-500 hidden sm:block">
                 {businessName}
               </div>
@@ -119,6 +119,45 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="max-w-6xl mx-auto px-6 py-12">
         {children}
       </div>
+
+      <footer className="border-t border-slate-200 bg-white mt-16">
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="text-xl font-semibold text-slate-900 mb-4">StarQR</div>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Modern loyalty cards for local businesses.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-900 text-sm mb-3">Product</h3>
+              <ul className="space-y-2">
+                <li><Link href="/dashboard/upgrade" className="text-sm text-slate-600 hover:text-slate-900">Pricing</Link></li>
+                <li><Link href="/signup" className="text-sm text-slate-600 hover:text-slate-900">Get Started</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-900 text-sm mb-3">Company</h3>
+              <ul className="space-y-2">
+                <li><Link href="/about" className="text-sm text-slate-600 hover:text-slate-900">About</Link></li>
+                <li><Link href="/faq" className="text-sm text-slate-600 hover:text-slate-900">FAQ</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-900 text-sm mb-3">Legal</h3>
+              <ul className="space-y-2">
+                <li><Link href="/privacy" className="text-sm text-slate-600 hover:text-slate-900">Privacy</Link></li>
+                <li><Link href="/terms" className="text-sm text-slate-600 hover:text-slate-900">Terms</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-slate-200 pt-8">
+            <p className="text-sm text-slate-500 text-center">
+              © 2026 StarQR. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

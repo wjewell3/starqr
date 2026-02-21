@@ -11,6 +11,11 @@ interface CheckInData {
   reward_text: string;
   business_name: string;
   isFirstSignup: boolean;
+  wallet_config?: {
+    logo_url?: string;
+    stamp_bg_color?: string;
+    stamp_text_color?: string;
+  };
 }
 
 export default function CheckIn() {
@@ -116,58 +121,74 @@ export default function CheckIn() {
 
   if (data) {
     const progress = (data.stamps_current / data.stamps_needed) * 100;
+    const bgColor = data.wallet_config?.stamp_bg_color || '#1E40AF';
+    const textColor = data.wallet_config?.stamp_text_color || '#FFFFFF';
     
     // Show welcome screen for first signup
     if (data.isFirstSignup && !data.redeemed) {
       return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-6">
           <div className="w-full max-w-md">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
-              <div className="text-center mb-6">
-                <h2 className="text-2xl font-semibold mb-2 text-slate-900">Welcome to {data.business_name}!</h2>
-                <p className="text-slate-600 mb-6">
-                  Thanks for signing up. You've earned 2 bonus stars to get you started.
-                </p>
-              </div>
-
-              <div className="mb-6">
-                <div className="flex justify-between text-xs mb-2.5 text-slate-600">
-                  <span className="font-medium">{data.stamps_current} stars</span>
-                  <span>{data.stamps_needed - data.stamps_current} remaining</span>
+            <div 
+              className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200 bg-cover bg-center bg-no-repeat relative overflow-hidden"
+              style={{
+                backgroundImage: data.wallet_config?.logo_url ? `url('${data.wallet_config.logo_url}')` : 'none',
+                backgroundColor: data.wallet_config?.logo_url ? 'rgba(0, 0, 0, 0.4)' : '#ffffff'
+              }}
+            >
+              {data.wallet_config?.logo_url && (
+                <div className="absolute inset-0 bg-black/40" />
+              )}
+              <div className="relative z-10">
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl font-semibold mb-2 text-white drop-shadow-lg">Welcome to {data.business_name}!</h2>
+                  <p className="text-white/90 mb-6 drop-shadow">
+                    Thanks for signing up. You've earned 2 bonus stars to get you started.
+                  </p>
                 </div>
-                <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-blue-500 to-violet-500 rounded-full transition-all duration-700"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-5 gap-2.5 mb-6">
-                {Array.from({ length: data.stamps_needed }).map((_, i) => (
-                  <div
-                    key={i}
-                    className={`aspect-square rounded-lg flex items-center justify-center transition-all duration-300 ${
-                      i < data.stamps_current
-                        ? 'bg-gradient-to-br from-blue-500 to-violet-500'
-                        : 'bg-slate-100'
-                    }`}
-                  >
-                    {i < data.stamps_current && (
-                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                      </svg>
-                    )}
+                <div className="mb-6">
+                  <div className="flex justify-between text-xs mb-2.5 text-white/90">
+                    <span className="font-medium">{data.stamps_current} stars</span>
+                    <span>{data.stamps_needed - data.stamps_current} remaining</span>
                   </div>
-                ))}
-              </div>
+                  <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full rounded-full transition-all duration-700"
+                      style={{ 
+                        width: `${progress}%`,
+                        backgroundColor: bgColor 
+                      }}
+                    />
+                  </div>
+                </div>
 
-              <button
-                onClick={() => setData(null)}
-                className="w-full bg-slate-900 text-white py-2.5 text-sm rounded-md hover:bg-slate-800 transition-colors font-medium"
-              >
-                Continue
-              </button>
+                <div className="grid grid-cols-5 gap-4 mb-6">
+                  {Array.from({ length: data.stamps_needed }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-center transition-all duration-300"
+                    >
+                      {i < data.stamps_current ? (
+                        <svg className="w-16 h-16" fill="white" viewBox="0 0 24 24">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-16 h-16" fill="rgba(255, 255, 255, 0.3)" viewBox="0 0 24 24">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setData(null)}
+                  className="w-full bg-slate-900 text-white py-2.5 text-sm rounded-md hover:bg-slate-800 transition-colors font-medium"
+                >
+                  Continue
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -192,33 +213,46 @@ export default function CheckIn() {
               </div>
             </div>
           ) : (
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
-              <h3 className="text-xl font-semibold mb-6 text-slate-900 text-center">{data.business_name}</h3>
+            <div 
+              className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200 bg-cover bg-center bg-no-repeat relative overflow-hidden"
+              style={{
+                backgroundImage: data.wallet_config?.logo_url ? `url('${data.wallet_config.logo_url}')` : 'none',
+                backgroundColor: data.wallet_config?.logo_url ? 'rgba(0, 0, 0, 0.4)' : '#f8fafc'
+              }}
+            >
+              {data.wallet_config?.logo_url && (
+                <div className="absolute inset-0 bg-black/40" />
+              )}
+              <div className="relative z-10">
+                <h3 className="text-xl font-semibold mb-6 text-white text-center drop-shadow-lg">{data.business_name}</h3>
               <div className="mb-6">
-                <div className="flex justify-between text-xs mb-2.5 text-slate-600">
+                <div className="flex justify-between text-xs mb-2.5 text-white/90">
                   <span className="font-medium">{data.stamps_current} stars</span>
                   <span>{data.stamps_needed - data.stamps_current} remaining</span>
                 </div>
-                <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-blue-500 to-violet-500 rounded-full transition-all duration-700"
-                    style={{ width: `${progress}%` }}
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{ 
+                      width: `${progress}%`,
+                      backgroundColor: bgColor 
+                    }}
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-5 gap-2.5 mb-6">
+              <div className="grid grid-cols-5 gap-4 mb-6">
                 {Array.from({ length: data.stamps_needed }).map((_, i) => (
                   <div
                     key={i}
-                    className={`aspect-square rounded-lg flex items-center justify-center transition-all duration-300 ${
-                      i < data.stamps_current
-                        ? 'bg-gradient-to-br from-blue-500 to-violet-500'
-                        : 'bg-slate-100'
-                    }`}
+                    className="flex items-center justify-center transition-all duration-300"
                   >
-                    {i < data.stamps_current && (
-                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    {i < data.stamps_current ? (
+                      <svg className="w-16 h-16" fill="white" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                      </svg>
+                    ) : (
+                      <svg className="w-16 h-16" fill="rgba(255, 255, 255, 0.3)" viewBox="0 0 24 24">
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                       </svg>
                     )}
@@ -228,10 +262,11 @@ export default function CheckIn() {
 
               <button
                 onClick={() => setData(null)}
-                className="text-xs text-slate-600 hover:text-slate-900 transition-colors"
+                className="text-xs text-white/80 hover:text-white transition-colors"
               >
                 Done
               </button>
+              </div>
             </div>
           )}
         </div>

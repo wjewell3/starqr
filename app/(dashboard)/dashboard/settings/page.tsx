@@ -19,6 +19,8 @@ export default function Settings() {
   const [rewardText, setRewardText] = useState('');
   const [stampsNeeded, setStampsNeeded] = useState(10);
   const [qr, setQr] = useState('');
+  const [walletConfig, setWalletConfig] = useState<{ logo_url?: string; stamp_bg_color?: string; stamp_text_color?: string }>({});
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -49,6 +51,7 @@ export default function Settings() {
       setBusinessType(merchant.business_type || 'coffee');
       setRewardText(merchant.reward_text);
       setStampsNeeded(merchant.stamps_needed);
+      setWalletConfig(merchant.wallet_config || {});
       
       const QRCode = (await import('qrcode')).default;
       const url = `${window.location.origin}/c/${merchantSlug}`;
@@ -75,6 +78,7 @@ export default function Settings() {
         business_type: businessType,
         reward_text: rewardText.trim(),
         stamps_needed: stampsNeeded,
+        wallet_config: walletConfig,
       })
       .eq('id', merchantId);
 
@@ -157,6 +161,60 @@ export default function Settings() {
     link.download = `${businessName.replace(/\s+/g, '-')}-qr-code.png`;
     link.href = qr;
     link.click();
+  };
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setMessage(null);
+
+    // Read file as data URL
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const dataUrl = event.target?.result as string;
+
+      // Validate file size (max 500KB for data URLs)
+      if (dataUrl.length > 500000) {
+        setUploading(false);
+        setMessage({ type: 'error', text: 'Logo image is too large (max 500KB)' });
+        return;
+      }
+
+      const newWalletConfig = {
+        ...walletConfig,
+        logo_url: dataUrl,
+      };
+
+      setWalletConfig(newWalletConfig);
+
+      // Immediately save to database
+      const supabase = createClient();
+      const { error: updateError } = await supabase
+        .from('merchants')
+        .update({
+          wallet_config: newWalletConfig,
+        })
+        .eq('id', merchantId);
+
+      setUploading(false);
+
+      if (updateError) {
+        setMessage({ type: 'error', text: `Failed to save logo: ${updateError.message}` });
+        console.error('Database update error:', updateError);
+        return;
+      }
+
+      setMessage({ type: 'success', text: 'Logo uploaded successfully' });
+    };
+
+    reader.onerror = () => {
+      setUploading(false);
+      setMessage({ type: 'error', text: 'Failed to read logo file' });
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const printQR = () => {
@@ -319,6 +377,127 @@ export default function Settings() {
               {saving ? 'Saving...' : 'Save changes'}
             </button>
           </form>
+        </div>
+
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">
+          <h2 className="font-semibold text-lg mb-2 text-slate-900">Stamp Card Design</h2>
+          <p className="text-xs text-slate-600 mb-6">Customize how your stamp card looks. Click "Save changes" at the bottom to apply.</p>
+          
+          <div className="space-y-6">
+            <div>
+              <label className="block text-xs font-medium mb-2 text-slate-700">Logo</label>
+              <div className="flex gap-4 items-start">
+                {walletConfig.logo_url && (
+                  <div className="w-20 h-20 bg-white border border-slate-200 rounded-lg p-2 flex items-center justify-center flex-shrink-0">
+                    <img 
+                      src={walletConfig.logo_url} 
+                      alt="Business logo" 
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </div>
+                )}
+                <div className="flex-1">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    disabled={uploading}
+                    className="text-sm text-slate-600 cursor-pointer"
+                  />
+                  <p className="text-xs text-slate-500 mt-1.5">PNG or JPG, max 500KB</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium mb-2 text-slate-700">Stamp Background Color</label>
+              <div className="flex gap-3 items-center">
+                <input
+                  type="color"
+                  value={walletConfig.stamp_bg_color || '#1E40AF'}
+                  onChange={(e) => setWalletConfig({ ...walletConfig, stamp_bg_color: e.target.value })}
+                  className="w-12 h-10 rounded cursor-pointer border border-slate-300"
+                />
+                <code className="text-xs bg-slate-50 px-2 py-1 rounded border border-slate-200">
+                  {walletConfig.stamp_bg_color || '#1E40AF'}
+                </code>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium mb-2 text-slate-700">Stamp Text Color</label>
+              <div className="flex gap-3 items-center">
+                <input
+                  type="color"
+                  value={walletConfig.stamp_text_color || '#FFFFFF'}
+                  onChange={(e) => setWalletConfig({ ...walletConfig, stamp_text_color: e.target.value })}
+                  className="w-12 h-10 rounded cursor-pointer border border-slate-300"
+                />
+                <code className="text-xs bg-slate-50 px-2 py-1 rounded border border-slate-200">
+                  {walletConfig.stamp_text_color || '#FFFFFF'}
+                </code>
+              </div>
+            </div>
+
+            <div className="border-t border-slate-200 pt-6">
+              <h3 className="text-xs font-medium mb-4 text-slate-700">Preview</h3>
+              <div 
+                className="bg-slate-50 rounded-lg p-4 border border-slate-200 bg-cover bg-center bg-no-repeat relative overflow-hidden min-h-72"
+                style={{
+                  backgroundImage: walletConfig.logo_url ? `url('${walletConfig.logo_url}')` : 'none',
+                  backgroundColor: walletConfig.logo_url ? 'rgba(0, 0, 0, 0.4)' : '#f1f5f9'
+                }}
+              >
+                {walletConfig.logo_url && (
+                  <div className="absolute inset-0 bg-black/40" />
+                )}
+                <div className="relative z-10">
+                  <div className="text-center mb-4">
+                    <p className="text-sm font-semibold text-white drop-shadow">{businessName}</p>
+                  </div>
+                  <div className="flex justify-between text-xs mb-2.5 text-white/90">
+                    <span className="font-medium">3 stamps</span>
+                    <span>{stampsNeeded - 3} remaining</span>
+                  </div>
+                  <div className="h-1.5 bg-white/20 rounded-full overflow-hidden mb-4">
+                    <div 
+                      className="h-full rounded-full transition-all duration-300"
+                      style={{ 
+                        width: `${(3 / stampsNeeded) * 100}%`,
+                        backgroundColor: walletConfig.stamp_bg_color || '#1E40AF'
+                      }}
+                    />
+                  </div>
+                  <div className="grid grid-cols-5 gap-2">
+                    {Array.from({ length: stampsNeeded }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-center"
+                      >
+                        {i < 3 ? (
+                          <svg className="w-14 h-14" fill="white" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                          </svg>
+                        ) : (
+                          <svg className="w-14 h-14" fill="rgba(255, 255, 255, 0.3)" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                          </svg>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="w-full bg-slate-900 text-white py-2.5 text-sm rounded-md hover:bg-slate-800 disabled:opacity-60 transition-colors font-medium mt-6"
+            >
+              {saving ? 'Saving...' : 'Save changes'}
+            </button>
+          </div>
         </div>
 
         <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-slate-200">

@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     // 1. Get merchant details
     const { data: merchant, error: merchantError } = await supabase
       .from('merchants')
-      .select('id, business_name, stamps_needed, reward_text, plan_tier, subscription_status')
+      .select('id, business_name, stamps_needed, reward_text, plan_tier, subscription_status, wallet_config')
       .eq('id', merchantId)
       .single();
 
@@ -209,6 +209,7 @@ export async function POST(req: NextRequest) {
       redeemed,
       reward_text: merchant.reward_text,
       business_name: merchant.business_name,
+      wallet_config: merchant.wallet_config,
       token: cacheToken,
       customer_id: customer.id,
       isFirstSignup,
